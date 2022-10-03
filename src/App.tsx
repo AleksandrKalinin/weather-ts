@@ -13,7 +13,7 @@ type Weather = {
   coord: object,
   dt: number,
   id: number,
-  main: object,
+  main: { [key: string]: any },
   name: string,
   rain: object,
   sys: {
@@ -24,7 +24,7 @@ type Weather = {
   timezone: number,
   visibility: number,
   weather: { [key: string]: any }[],
-  wind: object
+  wind: { [key: string]: any }
 }
 
 type Forecast = {
