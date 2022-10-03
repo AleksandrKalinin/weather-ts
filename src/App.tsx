@@ -6,7 +6,7 @@ import ForecastItem from './ForecastItem';
 import ForecastCurrent from './ForecastCurrent';
 import SearchBar from './SearchBar';
 
-type Data = {
+type Weather = {
   base: string,
   clouds: object,
   cod: number,
@@ -16,35 +16,86 @@ type Data = {
   main: object,
   name: string,
   rain: object,
-  sys: object,
+  sys: {
+    country: 'string',
+    sunrise: number,
+    sunset: number
+  },
   timezone: number,
   visibility: number,
-  weather: object[],
+  weather: { [key: string]: any }[],
   wind: object
+}
+
+type Forecast = {
+  city: object,
+  cnt: number,
+  code: string,
+  list: { [key:string]: any }[],
+  message: number 
 }
 
 const App:React.FC = () => {
 
-  const [data, setData] = useState<any>({});
-
+  const [forecast, setForecast] = useState<Forecast>();
   const [coords, setCoords] = useState<number[]>([])
 
+  const [isFetching, setFetching] = useState<boolean>(false);
+  const [isVisible, setVisible] = useState<boolean>(false);
+  const [isFailed, setFailed] = useState<boolean>(false);
+  const [iconUrl, setIconUrl] = useState<string>('');
+  const [weather, setWeather] = useState<Weather>();
+  const [timestrSunrise, setSunrise] = useState<number>();
+  const [timestrSunset, setSunset] = useState<number>();
+  const [currentBg, setCurrentBg] = useState<string>('');
+
+/*
   useEffect(() => {
     const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
-    const API_link = `https://api.openweathermap.org/data/2.5/weather?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}`;
-    fetch(API_link)
+    const forecastLink = `https://api.openweathermap.org/data/2.5/forecast?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}`;
+    const weatherLink = `https://api.openweathermap.org/data/2.5/weather?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}`;
+    fetch(forecastLink)
       .then((response) => response.json())
-      .then((data) => setData(data));
+      .then((forecast) => setForecast(forecast))
+      console.log(forecast);
   }, [coords]) 
+*/
+  useEffect(() => {
+
+    if(true) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setCoords([pos.coords.latitude, pos.coords.longitude])
+        const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
+        let coords = [52.308670, 29.524830]; 
+        const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}&units=metric`;
+        const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}&units=metric`;
+        axios.all([axios.get(url), axios.get(url2)])
+             .then(axios.spread((first, second) => { 
+                const forecast = first.data;
+                const weather = second.data;
+                setForecast(forecast);
+                setWeather(weather);
+             }))
+        })
+       
+      } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      
+  },[])  
 
   useEffect(() => {
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-          console.log(pos.coords);
-          setCoords([pos.coords.latitude, pos.coords.longitude])
-        }) 
-      } 
-  },[])  
+    if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
+      console.log(weather);
+      console.log(forecast);
+
+      fetchData()
+    }
+  },[forecast, weather])
+
+  const defaultWeather = () => {
+
+  }
 
   const getForecast = () => {
 
@@ -53,6 +104,82 @@ const App:React.FC = () => {
   const getCity = () => {
 
   }
+
+  const consoleData = () => {
+    
+  }
+
+  const fetchData = () => {
+      console.log("weather", weather);
+      console.log("forecast", forecast);
+
+      let iconCode = weather?.weather[0]?.icon;
+      let iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";      
+      let sunrise = weather?.sys?.sunrise;
+      let sunset = weather?.sys?.sunset;
+      console.log(sunrise);
+      let dateSunrise = new Date(sunrise! * 1000);
+      let timestrSunrise = dateSunrise.toLocaleTimeString();
+      let dateSunset = new Date(sunset! * 1000);
+      let timestrSunset = dateSunset.toLocaleTimeString();
+      let currentForecast = forecast!.list.slice();
+      let newForecast = [];
+      let newObj = {};
+      currentForecast.map((item,index) =>{
+        let date = new Date(item.dt * 1000);
+        let hours = date.getHours();
+        let minutes = "0" + date.getMinutes();
+        let seconds = "0" + date.getSeconds();
+        let week = ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        let day = date.getDate();
+        let weekday = week[date.getDay()];
+        let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);          
+        item.dt = formattedTime;
+        item.weekday = weekday;
+        item.day = day;
+      }) 
+      for (let i = 0; i < currentForecast.length; i+=8) {
+        let iconCode = currentForecast[i].weather[0].icon;
+        let iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";  
+        newObj["formattedTime"] = currentForecast[i].dt;
+        newObj["weekday"] = currentForecast[i].weekday;
+        newObj["day"] = currentForecast[i].day;
+        newObj["temp"] = currentForecast[i].main.temp;
+        newObj["max"] = currentForecast[i].main.temp_max;
+        newObj["min"] = currentForecast[i].main.temp_min;
+        newObj["currentName"] = currentForecast[i].weather[0].main;
+        newObj["currentDescription"] = currentForecast[i].weather[0].description;
+        newObj["icon"] = iconUrl;
+        newObj["wind"] = currentForecast[i].wind.speed;
+        newForecast.push(newObj);
+        newObj = {};
+      }
+      let condition = weather.weather[0].main;
+      let element = document.getElementById('root-wrapper')
+      if (condition === "Clouds") {
+        setCurrentBg('cloudy.jpg');
+      }
+      else if (condition === "Rain" || condition === "Drizzle") {
+        setCurrentBg('rainy.jpg');
+      }
+      else if(condition === "Snow") {
+        setCurrentBg('snowy.jpg');
+      }
+      else if (condition === "Mist") {
+        setCurrentBg('misty.jpg');
+      }      
+      else{
+        setCurrentBg('sunny.jpg');
+      }
+      return ({
+        timestrSunrise: timestrSunrise,
+        timestrSunset: timestrSunset,
+        iconCode: iconCode,
+        iconUrl: iconUrl,
+        forecast: forecast,
+        newForecast: newForecast
+      });
+    }
 
   const GlobalStyle = createGlobalStyle`
     * {
@@ -66,8 +193,21 @@ const App:React.FC = () => {
     }
   `;
 
+  const fetchInputData = () => {
+
+  }
+
+  const handleKeyPress = () => {
+
+  }
+
+  const updateSearch = () => {
+
+  }
+
   return (
       <>
+      {/*
       <div className="App">
         <GlobalStyle />
         <div className="main">
@@ -100,77 +240,78 @@ const App:React.FC = () => {
             </>
           : null}
         </div>
-        <button onClick = {() => console.log(data)}>Console Data</button>
+        <button onClick = {() => console.log(forecast)}>Console Data</button>
         <button onClick= {() => getForecast()}>get forecast</button>
         <button onClick= {() => getCity()}>Get city</button>
         <button onClick= {() => console.log(data)}>Get city</button>
       </div>
-      
-    {/*
+      */}
+    
       <Fragment>
+        <button onClick={() => consoleData()}>Get forecast</button>
         <div id="root-image">
-          <img src={this.state.currentBackground} />
+          <img src="" />
         </div>
         <div id="root-wrapper">
           <div className="input-wrapper">
-            <input value={this.state.search} placeholder="search for city" onKeyPress={this.handleKeyPress} className="main-input" onChange={this.updateSearch} ></input> 
-            <button onClick={this.fetchInputData} primary >Search</button>
+            <input value="" placeholder="search for city" onKeyPress={() => handleKeyPress()} className="main-input" onChange={() => updateSearch()} ></input> 
+            <button onClick={() => fetchInputData()}>Search</button>
           </div>
-         {this.state.isVisible ?
+         {isVisible ?
           <Fragment>        
             <div className="weather-wrapper">
-              <div columns={2} className="top-row" >
+              <div  className="top-row" >
                 <div className="column-header">
-                  <h1>{this.state.weather.main.temp}° </h1>
+                  <h1>{weather.main.temp}° </h1>
                 </div>
                 <div className="column-header">
-                  <h2>{this.state.weather.name}, {this.state.weather.sys.country}</h2>
+                  <h2>{weather.name}, {weather.sys.country}</h2>
                 </div>
               </div>          
-              <div columns={4} className="weather-row">
+              <div  className="weather-row">
                 <div className="weather-column" >
-                  <h4 className="weather-header">{this.state.weather.main.temp_min}° / {this.state.weather.main.temp_max}° </h4>
+                  <h4 className="weather-header">{weather.main.temp_min}° / {weather.main.temp_max}° </h4>
                   <p className="weather-descr">High / Low</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.weather.main.temp}° </h4>
+                  <h4 className="weather-header">{weather.main.temp}° </h4>
                   <p className="weather-descr">Feels like</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.timestrSunrise}</h4>
+                  <h4 className="weather-header">{timestrSunrise}</h4>
                   <p className="weather-descr">Sunrise</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.timestrSunset}</h4>
+                  <h4 className="weather-header">{timestrSunset}</h4>
                   <p className="weather-descr">Sunset</p>
                 </div>              
               </div>
-              <div columns={4} className="weather-row">
+              <div className="weather-row">
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.weather.weather[0].main} <img src={this.state.iconUrl}/></h4>
+                  <h4 className="weather-header">{weather.weather[0].main} <img src={iconUrl}/></h4>
                   <p className="weather-descr">Current condition</p>
                 </div>            
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.weather.main.pressure} hpa</h4>
+                  <h4 className="weather-header">{weather.main.pressure} hpa</h4>
                   <p className="weather-descr">Pressure</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.weather.main.humidity}</h4>
+                  <h4 className="weather-header">{weather.main.humidity}</h4>
                   <p className="weather-descr">Humidity</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{this.state.weather.wind.speed} m/s</h4>
+                  <h4 className="weather-header">{weather.wind.speed} m/s</h4>
                   <p className="weather-descr">Wind</p>
                 </div>
               </div>
-              <div columns={1}>
+              <div >
                 <div>
                   <p className="weather-descr">Today: {new Date().toLocaleDateString()}</p>
                 </div>
               </div>            
             </div>
-            <div itemsPerRow={5} className="forecast-wrapper">
-              {this.state.forecast.map((item,index) =>
+            <div className="forecast-wrapper">
+              {/*forecast.list.map((item,index) =>
                 <div key={index}>
                   <div className="header-wrapper">
                     <h2>{item.weekday}, {item.day} </h2>                
@@ -184,24 +325,23 @@ const App:React.FC = () => {
                       <p>Wind speed: {item.wind} m/s</p>
                   </div>
                 </div>
-              )}
+              )*/}
             </div>
          </Fragment> : 
             null
         }
-         { this.state.isFetching ?
-            <div divided className="weather-wrapper fetching-wrapper">
+         { isFetching ?
+            <div className="weather-wrapper fetching-wrapper">
                 Fetching...
             </div>
             : null}
-         { this.state.isFailed ?
-            <div divided className="weather-wrapper fetching-wrapper">
+         { isFailed ?
+            <div className="weather-wrapper fetching-wrapper">
                 Sorry, the request failed. Try one more time
             </div>
             : null}               
         </div>
       </Fragment> 
-    */}
     </>
   );
 }
