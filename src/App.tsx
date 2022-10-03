@@ -35,6 +35,19 @@ type Forecast = {
   message: number 
 }
 
+type ForecastData = {
+  formattedTime?: string,
+  weekday?: string,
+  day?: number,
+  temp?: number,
+  max?: number,
+  min?: number,
+  currentName?: string,
+  currentDescription?: string,
+  icon?: string,
+  wind?: number  
+}
+
 type NewObj = {
   formattedTime?: string,
   weekday?: string,
@@ -51,7 +64,8 @@ type NewObj = {
 const App:React.FC = () => {
 
   const [forecast, setForecast] = useState<Forecast>();
-  const [coords, setCoords] = useState<number[]>([])
+  const [forecastData, setForecastData] = useState<ForecastData[]>();
+  const [coords, setCoords] = useState<number[]>([]);
 
   const [isFetching, setFetching] = useState<boolean>(false);
   const [isVisible, setVisible] = useState<boolean>(false);
@@ -61,6 +75,7 @@ const App:React.FC = () => {
   const [timestrSunrise, setSunrise] = useState<number>();
   const [timestrSunset, setSunset] = useState<number>();
   const [currentBg, setCurrentBg] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
 
 /*
   useEffect(() => {
@@ -70,7 +85,6 @@ const App:React.FC = () => {
     fetch(forecastLink)
       .then((response) => response.json())
       .then((forecast) => setForecast(forecast))
-      console.log(forecast);
   }, [coords]) 
 */
   useEffect(() => {
@@ -85,7 +99,9 @@ const App:React.FC = () => {
         axios.all([axios.get(url), axios.get(url2)])
              .then(axios.spread((first, second) => { 
                 const forecast = first.data;
+                console.log("initial", forecast);
                 const weather = second.data;
+                console.log("initialWeather", weather);
                 setForecast(forecast);
                 setWeather(weather);
              }))
@@ -99,10 +115,8 @@ const App:React.FC = () => {
 
   useEffect(() => {
     if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
-      console.log(weather);
-      console.log(forecast);
-
-      fetchData()
+      let data = fetchData();
+      setVisible(true);
     }
   },[forecast, weather])
 
@@ -123,14 +137,10 @@ const App:React.FC = () => {
   }
 
   const fetchData = () => {
-      console.log("weather", weather);
-      console.log("forecast", forecast);
-
       let iconCode = weather?.weather[0]?.icon;
       let iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";      
       let sunrise = weather?.sys?.sunrise;
       let sunset = weather?.sys?.sunset;
-      console.log(sunrise);
       let dateSunrise = new Date(sunrise! * 1000);
       let timestrSunrise = dateSunrise.toLocaleTimeString();
       let dateSunset = new Date(sunset! * 1000);
@@ -184,6 +194,7 @@ const App:React.FC = () => {
       else{
         setCurrentBg('sunny.jpg');
       }
+      setForecastData(newForecast);
       return ({
         timestrSunrise: timestrSunrise,
         timestrSunset: timestrSunset,
@@ -207,15 +218,30 @@ const App:React.FC = () => {
   `;
 
   const fetchInputData = () => {
-
+    const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
+    const url = `http://api.openweathermap.org/data/2.5/forecast?q=${search}&appid=${API_KEY}&units=metric`;
+    const url2 = `http://api.openweathermap.org/data/2.5/weather?q=${search}&limit=1&appid=${API_KEY}&units=metric`; 
+      axios.all([axios.get(url), axios.get(url2)])
+         .then(axios.spread((first, second) => { 
+            const forecast = first.data;
+            const weather = second.data;
+            console.log('callWeather', weather);
+            //console.log(weather);
+            console.log("call", forecast);
+            setForecast(forecast);
+            setWeather(weather);
+         }))
   }
 
-  const handleKeyPress = () => {
-
+  const handleKeyPress = (e: any) => {
+    if(e.charCode === 13) {
+      fetchInputData();
+      setSearch('')
+    }
   }
 
-  const updateSearch = () => {
-
+  const updateSearch = (e: any) => {
+    setSearch(search + e.target.value)
   }
 
   return (
@@ -267,7 +293,7 @@ const App:React.FC = () => {
         </div>
         <div id="root-wrapper">
           <div className="input-wrapper">
-            <input value="" placeholder="search for city" onKeyPress={() => handleKeyPress()} className="main-input" onChange={() => updateSearch()} ></input> 
+            <input value={search} placeholder="search for city" onKeyPress={(e) => handleKeyPress(e)} className="main-input" onChange={(e) => setSearch(e.target.value)} ></input> 
             <button onClick={() => fetchInputData()}>Search</button>
           </div>
          {isVisible ?
@@ -324,8 +350,8 @@ const App:React.FC = () => {
               </div>            
             </div>
             <div className="forecast-wrapper">
-              {/*forecast.list.map((item,index) =>
-                <div key={index}>
+              {forecastData?.map((item,index) =>
+                <div key={index} className="forecast-item">
                   <div className="header-wrapper">
                     <h2>{item.weekday}, {item.day} </h2>                
                   </div>
@@ -338,7 +364,7 @@ const App:React.FC = () => {
                       <p>Wind speed: {item.wind} m/s</p>
                   </div>
                 </div>
-              )*/}
+              )}
             </div>
          </Fragment> : 
             null
