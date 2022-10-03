@@ -35,6 +35,19 @@ type Forecast = {
   message: number 
 }
 
+type NewObj = {
+  formattedTime?: string,
+  weekday?: string,
+  day?: number,
+  temp?: number,
+  max?: number,
+  min?: number,
+  currentName?: string,
+  currentDescription?: string,
+  icon?: string,
+  wind?: number
+}
+
 const App:React.FC = () => {
 
   const [forecast, setForecast] = useState<Forecast>();
@@ -124,7 +137,7 @@ const App:React.FC = () => {
       let timestrSunset = dateSunset.toLocaleTimeString();
       let currentForecast = forecast!.list.slice();
       let newForecast = [];
-      let newObj = {};
+      let newObj:NewObj = {};
       currentForecast.map((item,index) =>{
         let date = new Date(item.dt * 1000);
         let hours = date.getHours();
@@ -154,7 +167,7 @@ const App:React.FC = () => {
         newForecast.push(newObj);
         newObj = {};
       }
-      let condition = weather.weather[0].main;
+      let condition = weather?.weather[0]?.main;
       let element = document.getElementById('root-wrapper')
       if (condition === "Clouds") {
         setCurrentBg('cloudy.jpg');
@@ -261,20 +274,20 @@ const App:React.FC = () => {
           <Fragment>        
             <div className="weather-wrapper">
               <div  className="top-row" >
-                <div className="column-header">
-                  <h1>{weather.main.temp}° </h1>
+                <div className="column-header?">
+                  <h1>{weather?.main?.temp}° </h1>
                 </div>
                 <div className="column-header">
-                  <h2>{weather.name}, {weather.sys.country}</h2>
+                  <h2>{weather?.name}, {weather?.sys?.country}</h2>
                 </div>
               </div>          
               <div  className="weather-row">
                 <div className="weather-column" >
-                  <h4 className="weather-header">{weather.main.temp_min}° / {weather.main.temp_max}° </h4>
+                  <h4 className="weather-header">{weather?.main?.temp_min}° / {weather?.main?.temp_max}° </h4>
                   <p className="weather-descr">High / Low</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather.main.temp}° </h4>
+                  <h4 className="weather-header">{weather?.main?.temp}° </h4>
                   <p className="weather-descr">Feels like</p>
                 </div>
                 <div className="weather-column">
@@ -288,19 +301,19 @@ const App:React.FC = () => {
               </div>
               <div className="weather-row">
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather.weather[0].main} <img src={iconUrl}/></h4>
+                  <h4 className="weather-header">{weather?.weather[0]?.main} <img src={iconUrl}/></h4>
                   <p className="weather-descr">Current condition</p>
                 </div>            
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather.main.pressure} hpa</h4>
+                  <h4 className="weather-header">{weather?.main?.pressure} hpa</h4>
                   <p className="weather-descr">Pressure</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather.main.humidity}</h4>
+                  <h4 className="weather-header">{weather?.main?.humidity}</h4>
                   <p className="weather-descr">Humidity</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather.wind.speed} m/s</h4>
+                  <h4 className="weather-header">{weather?.wind?.speed} m/s</h4>
                   <p className="weather-descr">Wind</p>
                 </div>
               </div>
