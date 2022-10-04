@@ -1,40 +1,62 @@
 import React from 'react';
 import styled from 'styled-components';
 
+
 const ForecastItemWrapper = styled.div`
-  width: 150px;
+  width: 285px;
+  height: 300px;
+  background: rgb(46, 46, 70);
+  border: 1px solid #fff;
   color: #fff;
-  height: 200px;
+  opacity: 0.8;
+  padding: 0 10px;
+`
+
+const Header = styled.div`
+  padding-bottom: 0;
+  margin-bottom: 0;
+`
+
+const Title = styled.h2`
+  font-size: 18px;
+`
+const IconWrapper = styled.div`
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  text-align: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 `
-const Title = styled.h6`
-  margin: 0;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  background: #222A35;
-  padding: 3px 8px;
-  border-radius: 2px;
+const Description = styled.div`
+  padding-top: 0px;
+  padding-bottom: 50px;
 `
-const Temperature = styled.div`
-  margin: 0;
-  font-size: 28px;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+
+const Subtitle = styled.h4`
+  font-weight: 400 ;
+  font-size: 21px ;
+  margin-bottom: 14px;
 `
+
+const Text = styled.p`
+  font-size: 15px;
+`
+
 const ForecastItem:React.FC = () => {
   return (
     <ForecastItemWrapper>
-      <Title>Sun</Title>
-      <div className="forecast-current__image">
-        <img src="./icons8-partly-cloudy-day-48.png" className="forecast-current__icon"/>
-      </div> 
-      <Temperature>12C</Temperature>
+      <Header>
+        <Title>{item.weekday}, {item.day} </Title>                
+      </Header>
+      <IconWrapper>
+        <Image src={item.icon}/>
+      </IconWrapper>
+      <Description>
+          <Subtitle>{Math.round(Number(item.max))}°C / {Math.round(Number(item.min))}°C</Subtitle>
+          <Text>{item.currentName} ({item.currentDescription})</Text>
+          <Text>Wind speed: {item.wind} m/s</Text>
+      </Description>
     </ForecastItemWrapper>
   );
 }

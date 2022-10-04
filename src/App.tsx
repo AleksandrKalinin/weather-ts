@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import axios from 'axios';
-import ForecastItem from './ForecastItem';
+//import ForecastItem from './ForecastItem';
 import ForecastCurrent from './ForecastCurrent';
-import SearchBar from './SearchBar';
+//import SearchBar from './SearchBar';
 
 type Weather = {
   base: string,

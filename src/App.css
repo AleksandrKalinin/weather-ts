@@ -47,61 +47,6 @@ body{
   padding: 0 ;
 }
 
-.input-wrapper{
-  height: 36px;
-  margin: 0 auto;
-  max-width: 1500px;
-  width: calc(100% - 100px);
-}
-
-.input-wrapper button{
-  width: 85px;
-  color: #fff;
-  border-radius: none;
-  margin-left: 5px;
-  z-index: 999;
-  background: #2595EA;
-  background: #2185D0;
-  border: none;
-  height: 36px;
-  cursor: pointer;
-  border-radius: 3px;
-}
-
-.input-wrapper button:hover {
-  background: #2185D0;
-}
-
-.main-input{
-  width: calc(100% - 100px);
-  height: 36px;
-  padding: 0 5px;
-  font-size: 16px;
-  border: none;
-  border-radius: 3px;
-  outline: none;
-}
-
-.forecast-wrapper .card{
-  background: #2E2E46 ;
-  border-radius: 0 ;
-  border: none ;
-  color: #fff ;
-  opacity: 0.8 ;
-}
-
-.forecast-wrapper>.ui.card>.content>.header{
-  color: #fff ;
-}
-
-.forecast-wrapper .card .content{
-  border: 0 ;
-}
-
-.forecast-wrapper .card .content i{
-  font-size: 50px ;
-}
-
 .weather-header{
   display: -webkit-box;
   display: -ms-flexbox;
@@ -109,30 +54,6 @@ body{
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-.icon-wrapper{
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.icon-description{
-  padding-top: 0px ;
-  padding-bottom: 50px ;
-}
-
-.icon-description h4{
-  font-weight: 400 ;
-  font-size: 21px ;
-  margin-bottom: 14px;
-}
-
-.icon-description p{
-  font-size: 15px;
 }
 
 .weather-text{
@@ -161,6 +82,7 @@ body{
 .weather-wrapper h4{
   font-size: 23px;
   font-weight: 400;
+  margin-bottom: 12px;
 }
 
 .weather-wrapper p{
@@ -188,6 +110,7 @@ body{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 24px;
 
 }
 
@@ -211,7 +134,7 @@ body{
   height: 80px;
 }
 
-.header-wrapper .header, .header-wrapper{
+.header-wrapper .header{
   padding-bottom: 0 ;
   margin-bottom: 0 ;
 }
@@ -244,18 +167,4 @@ body{
   justify-content: space-between;
   max-width: 1500px;
   margin: 0 auto;
-}
-
-.forecast-item {
-  width: 285px;
-  height: 300px;
-  background: rgb(46, 46, 70);
-  border: 1px solid #fff;
-  color: #fff;
-  opacity: 0.8;
-  padding: 0 10px;
-}
-
-.forecast-item h2 {
-  font-size: 18px;
 }
