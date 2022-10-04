@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import axios from 'axios';
-import './App.css';
 import ForecastItem from './ForecastItem';
 import ForecastCurrent from './ForecastCurrent';
 import SearchBar from './SearchBar';
@@ -72,8 +71,8 @@ const App:React.FC = () => {
   const [isFailed, setFailed] = useState<boolean>(false);
   const [iconUrl, setIconUrl] = useState<string>('');
   const [weather, setWeather] = useState<Weather>();
-  const [timestrSunrise, setSunrise] = useState<number>();
-  const [timestrSunset, setSunset] = useState<number>();
+  const [timestrSunrise, setSunrise] = useState<string>();
+  const [timestrSunset, setSunset] = useState<string>();
   const [currentBg, setCurrentBg] = useState<string>('');
   const [search, setSearch] = useState<string>('');
 
@@ -195,6 +194,8 @@ const App:React.FC = () => {
         setCurrentBg('sunny.jpg');
       }
       setForecastData(newForecast);
+      setSunset(timestrSunset);
+      setSunrise(timestrSunrise);
       return ({
         timestrSunrise: timestrSunrise,
         timestrSunset: timestrSunset,
@@ -240,56 +241,11 @@ const App:React.FC = () => {
     }
   }
 
-  const updateSearch = (e: any) => {
-    setSearch(search + e.target.value)
-  }
-
   return (
       <>
-      {/*
-      <div className="App">
-        <GlobalStyle />
-        <div className="main">
-          <div className="main-background">
-            <img className="main-background__image" src="./background/pexels-lachlan-ross-6510395.jpg" />
-          </div>
-          {data ?
-            <>
-              <div className="main-weather">
-                <SearchBar />
-                <div>City: {data.name}</div>
-                <div className="main-weather__item weather-items">
-                  <p className="weather-items__param weather-item"><span className="weather-item__name">Wind:</span>12</p>
-                  <p className="weather-items__param weather-item"><span className="weather-item__name">Pressure:</span>22.3</p>
-                  <p className="weather-items__param weather-item"><span className="weather-item__name">Humidity:</span>54</p>
-                </div>
-              </div>
-              <div className="main-forecast">
-                <div className="forecast-wrapper">
-                  <ForecastCurrent />
-                  <div className="forecast-items">
-                    <ForecastItem />
-                    <ForecastItem />  
-                    <ForecastItem />  
-                    <ForecastItem />  
-                    <ForecastItem />                                            
-                  </div>
-                </div>
-              </div>            
-            </>
-          : null}
-        </div>
-        <button onClick = {() => console.log(forecast)}>Console Data</button>
-        <button onClick= {() => getForecast()}>get forecast</button>
-        <button onClick= {() => getCity()}>Get city</button>
-        <button onClick= {() => console.log(data)}>Get city</button>
-      </div>
-      */}
-    
       <Fragment>
-        <button onClick={() => consoleData()}>Get forecast</button>
         <div id="root-image">
-          <img src="" />
+          <img src={currentBg} alt="true"/>
         </div>
         <div id="root-wrapper">
           <div className="input-wrapper">
@@ -300,7 +256,7 @@ const App:React.FC = () => {
           <Fragment>        
             <div className="weather-wrapper">
               <div  className="top-row" >
-                <div className="column-header?">
+                <div className="column-header">
                   <h1>{weather?.main?.temp}° </h1>
                 </div>
                 <div className="column-header">
@@ -327,7 +283,7 @@ const App:React.FC = () => {
               </div>
               <div className="weather-row">
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather?.weather[0]?.main} <img src={iconUrl}/></h4>
+                  <h4 className="weather-header">{weather?.weather[0]?.main} <img src={iconUrl} /></h4>
                   <p className="weather-descr">Current condition</p>
                 </div>            
                 <div className="weather-column">
@@ -343,11 +299,7 @@ const App:React.FC = () => {
                   <p className="weather-descr">Wind</p>
                 </div>
               </div>
-              <div >
-                <div>
-                  <p className="weather-descr">Today: {new Date().toLocaleDateString()}</p>
-                </div>
-              </div>            
+              <p className="weather-text">Today: {new Date().toLocaleDateString()}</p>          
             </div>
             <div className="forecast-wrapper">
               {forecastData?.map((item,index) =>
@@ -356,7 +308,7 @@ const App:React.FC = () => {
                     <h2>{item.weekday}, {item.day} </h2>                
                   </div>
                   <div className="icon-wrapper">
-                    <img src={item.icon} />
+                    <img src={item.icon} alt="true"/>
                   </div>
                   <div className="icon-description">
                       <h4>{item.max} / {item.min}</h4>
