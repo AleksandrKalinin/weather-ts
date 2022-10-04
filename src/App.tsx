@@ -66,44 +66,38 @@ const App:React.FC = () => {
   const [forecastData, setForecastData] = useState<ForecastData[]>();
   const [coords, setCoords] = useState<number[]>([]);
 
-  const [isFetching, setFetching] = useState<boolean>(false);
+  const [isFetching, setFetching] = useState<boolean>(true);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [isFailed, setFailed] = useState<boolean>(false);
   const [iconUrl, setIconUrl] = useState<string>('');
   const [weather, setWeather] = useState<Weather>();
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
-  const [currentBg, setCurrentBg] = useState<string>('');
+  const [currentBg, setCurrentBg] = useState<string>('sunny.jpg');
   const [search, setSearch] = useState<string>('');
 
-/*
   useEffect(() => {
-    const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
-    const forecastLink = `https://api.openweathermap.org/data/2.5/forecast?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}`;
-    const weatherLink = `https://api.openweathermap.org/data/2.5/weather?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}`;
-    fetch(forecastLink)
-      .then((response) => response.json())
-      .then((forecast) => setForecast(forecast))
-  }, [coords]) 
-*/
-  useEffect(() => {
-
     if(true) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        setCoords([pos.coords.latitude, pos.coords.longitude])
+        let coords = []
+        setCoords([pos.coords.latitude, pos.coords.longitude]);
+        coords.push(pos.coords.latitude);
+        coords.push(pos.coords.longitude);
         const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
-        let coords = [52.308670, 29.524830]; 
         const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}&units=metric`;
         const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${coords[0]}&lon=${coords[1]}&appid=${API_KEY}&units=metric`;
         axios.all([axios.get(url), axios.get(url2)])
              .then(axios.spread((first, second) => { 
                 const forecast = first.data;
-                console.log("initial", forecast);
                 const weather = second.data;
-                console.log("initialWeather", weather);
                 setForecast(forecast);
                 setWeather(weather);
              }))
+            .catch((error) => { 
+              setFailed(true); 
+              setFetching(false);
+              setVisible(false)
+            });
         })
        
       } else {
@@ -116,6 +110,7 @@ const App:React.FC = () => {
     if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
       let data = fetchData();
       setVisible(true);
+      setFetching(false);
     }
   },[forecast, weather])
 
@@ -136,6 +131,7 @@ const App:React.FC = () => {
   }
 
   const fetchData = () => {
+      setFailed(false);
       let iconCode = weather?.weather[0]?.icon;
       let iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";      
       let sunrise = weather?.sys?.sunrise;
@@ -196,6 +192,7 @@ const App:React.FC = () => {
       setForecastData(newForecast);
       setSunset(timestrSunset);
       setSunrise(timestrSunrise);
+      setIconUrl(iconUrl);
       return ({
         timestrSunrise: timestrSunrise,
         timestrSunset: timestrSunset,
@@ -223,15 +220,17 @@ const App:React.FC = () => {
     const url = `http://api.openweathermap.org/data/2.5/forecast?q=${search}&appid=${API_KEY}&units=metric`;
     const url2 = `http://api.openweathermap.org/data/2.5/weather?q=${search}&limit=1&appid=${API_KEY}&units=metric`; 
       axios.all([axios.get(url), axios.get(url2)])
-         .then(axios.spread((first, second) => { 
-            const forecast = first.data;
-            const weather = second.data;
-            console.log('callWeather', weather);
-            //console.log(weather);
-            console.log("call", forecast);
-            setForecast(forecast);
-            setWeather(weather);
-         }))
+        .then(axios.spread((first, second) => { 
+          const forecast = first.data;
+          const weather = second.data;
+          setForecast(forecast);
+          setWeather(weather);
+        }))
+        .catch((error) => { 
+          setFailed(true); 
+          setFetching(false);
+          setVisible(false)
+        });
   }
 
   const handleKeyPress = (e: any) => {
@@ -245,7 +244,7 @@ const App:React.FC = () => {
       <>
       <Fragment>
         <div id="root-image">
-          <img src={currentBg} alt="true"/>
+          <img src={currentBg}/>
         </div>
         <div id="root-wrapper">
           <div className="input-wrapper">
@@ -257,7 +256,8 @@ const App:React.FC = () => {
             <div className="weather-wrapper">
               <div  className="top-row" >
                 <div className="column-header">
-                  <h1>{weather?.main?.temp}° </h1>
+                  <h1>{Math.round(Number(weather?.main?.temp))}° <img className="top-icon" src={iconUrl} /></h1>
+                  <h3>Today: {new Date().toLocaleDateString()}</h3>
                 </div>
                 <div className="column-header">
                   <h2>{weather?.name}, {weather?.sys?.country}</h2>
@@ -265,11 +265,11 @@ const App:React.FC = () => {
               </div>          
               <div  className="weather-row">
                 <div className="weather-column" >
-                  <h4 className="weather-header">{weather?.main?.temp_min}° / {weather?.main?.temp_max}° </h4>
+                  <h4 className="weather-header">{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </h4>
                   <p className="weather-descr">High / Low</p>
                 </div>
                 <div className="weather-column">
-                  <h4 className="weather-header">{weather?.main?.temp}° </h4>
+                  <h4 className="weather-header">{Math.round(Number(weather?.main?.feels_like))}°C </h4>
                   <p className="weather-descr">Feels like</p>
                 </div>
                 <div className="weather-column">
@@ -299,7 +299,6 @@ const App:React.FC = () => {
                   <p className="weather-descr">Wind</p>
                 </div>
               </div>
-              <p className="weather-text">Today: {new Date().toLocaleDateString()}</p>          
             </div>
             <div className="forecast-wrapper">
               {forecastData?.map((item,index) =>
@@ -308,10 +307,10 @@ const App:React.FC = () => {
                     <h2>{item.weekday}, {item.day} </h2>                
                   </div>
                   <div className="icon-wrapper">
-                    <img src={item.icon} alt="true"/>
+                    <img src={item.icon}/>
                   </div>
                   <div className="icon-description">
-                      <h4>{item.max} / {item.min}</h4>
+                      <h4>{Math.round(Number(item.max))}°C / {Math.round(Number(item.min))}°C</h4>
                       <p>{item.currentName} ({item.currentDescription})</p>
                       <p>Wind speed: {item.wind} m/s</p>
                   </div>

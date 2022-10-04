@@ -39,15 +39,15 @@
 	}
 
 	.weather-row {
-		width: calc(100% - 100px);
+		width: calc(100%);
 	}
 
 	.weather-text{
-  		width: calc(100% - 100px);
+  		width: calc(100%);
 	}
 
 	.top-row{
-  		width: calc(100% - 100px);
+  		width: calc(100%);
 	}
 
 	.weather-column {
