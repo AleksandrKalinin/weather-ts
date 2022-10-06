@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
+import { Context } from '../Context';
 import { ForecastItemWrapper, 
         Header, 
         Title, 
@@ -8,25 +9,9 @@ import { ForecastItemWrapper,
         Subtitle, 
         Text, 
         Image } from './style';
-
-
-type Props = {
-  item: {
-    formattedTime?: string,
-    weekday?: string,
-    day?: number,
-    temp?: number,
-    max?: number,
-    min?: number,
-    currentName?: string,
-    currentDescription?: string,
-    icon?: string,
-    wind?: number    
-  }
-}
+import { Props } from './types';
 
 const ForecastItem:React.FC<Props> = (props) => {
-
   return (
     <ForecastItemWrapper>
       <Header>

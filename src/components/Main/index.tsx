@@ -1,5 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
+//@ts-nocheck
+
+import React, { useState, useEffect, useContext, Fragment } from 'react';
 import axios from 'axios';
+import { Context } from '../Context';
 import { GlobalStyle, 
           RootContainer, 
           RootWrapper, 
@@ -19,66 +22,19 @@ import { GlobalStyle,
           ForecastWrapper, 
           TopRowImage, 
           WeatherItemImage   } from './style';
-import ForecastItem from './components/ForecastItem';
-import SearchBar from './components/SearchBar';
+import { Weather, Forecast, ForecastData, NewObj } from './types';
+import ForecastItem from '../ForecastItem';
+import SearchBar from '../SearchBar';
 
-type Weather = {
-  base: string,
-  clouds: object,
-  cod: number,
-  coord: object,
-  dt: number,
-  id: number,
-  main: { [key: string]: any },
-  name: string,
-  rain: object,
-  sys: {
-    country: 'string',
-    sunrise: number,
-    sunset: number
-  },
-  timezone: number,
-  visibility: number,
-  weather: { [key: string]: any }[],
-  wind: { [key: string]: any }
-}
+type Dispatch<A> = (value: A) => void;
 
-type Forecast = {
-  city: object,
-  cnt: number,
-  code: string,
-  list: { [key:string]: any }[],
-  message: number 
-}
-
-type ForecastData = {
-  formattedTime?: string,
-  weekday?: string,
-  day?: number,
-  temp?: number,
-  max?: number,
-  min?: number,
-  currentName?: string,
-  currentDescription?: string,
-  icon?: string,
-  wind?: number  
-}
-
-type NewObj = {
-  formattedTime?: string,
-  weekday?: string,
-  day?: number,
-  temp?: number,
-  max?: number,
-  min?: number,
-  currentName?: string,
-  currentDescription?: string,
-  icon?: string,
-  wind?: number
+type ContextValue = {
+  context: any,
+  setContext: (active: boolean) => void;
 }
 
 const App:React.FC = () => {
-
+  const [context, setContext] = useState<any>();
   const [forecast, setForecast] = useState<Forecast>();
   const [forecastData, setForecastData] = useState<ForecastData[]>();
   const [coords, setCoords] = useState<number[]>([]);
@@ -130,6 +86,16 @@ const App:React.FC = () => {
       setFetching(false);
     }
   },[forecast, weather])
+
+  useEffect(() => {
+    if(typeof context !== 'undefined') {
+      setWeather(context);
+      //let data = fetchData();
+      setVisible(true);
+      setFetching(false);
+      console.log(context);
+    }
+  },[context])
 
   const fetchData = () => {
       setFailed(false);
@@ -222,92 +188,87 @@ const App:React.FC = () => {
         });
   }
 
-  const handleKeyPress = (e: any) => {
-    if(e.charCode === 13) {
-      fetchInputData();
-      setSearch('')
-    }
-  }
-
   return (
-    <RootContainer>
-      <GlobalStyle />
-      <Fragment>
-        <RootImageWrapper>
-          <RootImage src={currentBg}/>
-        </RootImageWrapper>
-        <RootWrapper>
-          <SearchBar />
-         {isVisible ?
-          <Fragment>        
-            <WeatherWrapper>
-              <TopRow>
-                <TopRowItem>
-                  <TopRowTemp>{Math.round(Number(weather?.main?.temp))}° <TopRowImage src={iconUrl} /></TopRowTemp>
-                  <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>
-                </TopRowItem>
-                <TopRowItem>
-                  <TopRowLocation>{weather?.name}, {weather?.sys?.country}</TopRowLocation>
-                </TopRowItem>
-              </TopRow>          
-              <WeatherRow>
-                <WeatherItem>
-                  <WeatherItemHeader>{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </WeatherItemHeader>
-                  <WeatherItemText>High / Low</WeatherItemText>
-                </WeatherItem>
-                <WeatherItem>
-                  <WeatherItemHeader>{Math.round(Number(weather?.main?.feels_like))}°C </WeatherItemHeader>
-                  <WeatherItemText>Feels like</WeatherItemText>
-                </WeatherItem>
-                <WeatherItem>
-                  <WeatherItemHeader>{timestrSunrise}</WeatherItemHeader>
-                  <WeatherItemText>Sunrise</WeatherItemText>
-                </WeatherItem>
-                <WeatherItem>
-                  <WeatherItemHeader>{timestrSunset}</WeatherItemHeader>
-                  <WeatherItemText>Sunset</WeatherItemText>
-                </WeatherItem>              
-              </WeatherRow>
-              <WeatherRow>
-                <WeatherItem>
-                  <WeatherItemHeader>{weather?.weather[0]?.main} <WeatherItemImage src={iconUrl} /></WeatherItemHeader>
-                  <WeatherItemText>Current condition</WeatherItemText>
-                </WeatherItem>            
-                <WeatherItem>
-                  <WeatherItemHeader>{weather?.main?.pressure} hpa</WeatherItemHeader>
-                  <WeatherItemText>Pressure</WeatherItemText>
-                </WeatherItem>
-                <WeatherItem>
-                  <WeatherItemHeader>{weather?.main?.humidity}</WeatherItemHeader>
-                  <WeatherItemText>Humidity</WeatherItemText>
-                </WeatherItem>
-                <WeatherItem>
-                  <WeatherItemHeader>{weather?.wind?.speed} m/s</WeatherItemHeader>
-                  <WeatherItemText>Wind</WeatherItemText>
-                </WeatherItem>
-              </WeatherRow>
-            </WeatherWrapper>
-            <ForecastWrapper>
-              {forecastData?.map((item,index) => 
-                <ForecastItem key = {index} item = {item} />
-              )}
-            </ForecastWrapper>
-         </Fragment> : 
-            null
-        }
-         { isFetching ?
-            <FetchingWrapper>
-                Fetching...
-            </FetchingWrapper>
-            : null}
-         { isFailed ?
-            <FetchingWrapper>
-                Sorry, the request failed. Try one more time
-            </FetchingWrapper>
-            : null}               
-        </RootWrapper>
-      </Fragment> 
-    </RootContainer>
+    <Context.Provider value={[context, setContext]}>
+      <RootContainer>
+        <GlobalStyle />
+        <Fragment>
+          <RootImageWrapper>
+            <RootImage src={currentBg}/>
+          </RootImageWrapper>
+          <RootWrapper>
+            <SearchBar />
+           {isVisible ?
+            <Fragment>        
+              <WeatherWrapper>
+                <TopRow>
+                  <TopRowItem>
+                    <TopRowTemp>{Math.round(Number(weather?.main?.temp))}° <TopRowImage src={iconUrl} /></TopRowTemp>
+                    <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>
+                  </TopRowItem>
+                  <TopRowItem>
+                    <TopRowLocation>{weather?.name}, {weather?.sys?.country}</TopRowLocation>
+                  </TopRowItem>
+                </TopRow>          
+                <WeatherRow>
+                  <WeatherItem>
+                    <WeatherItemHeader>{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </WeatherItemHeader>
+                    <WeatherItemText>High / Low</WeatherItemText>
+                  </WeatherItem>
+                  <WeatherItem>
+                    <WeatherItemHeader>{Math.round(Number(weather?.main?.feels_like))}°C </WeatherItemHeader>
+                    <WeatherItemText>Feels like</WeatherItemText>
+                  </WeatherItem>
+                  <WeatherItem>
+                    <WeatherItemHeader>{timestrSunrise}</WeatherItemHeader>
+                    <WeatherItemText>Sunrise</WeatherItemText>
+                  </WeatherItem>
+                  <WeatherItem>
+                    <WeatherItemHeader>{timestrSunset}</WeatherItemHeader>
+                    <WeatherItemText>Sunset</WeatherItemText>
+                  </WeatherItem>              
+                </WeatherRow>
+                <WeatherRow>
+                  <WeatherItem>
+                    <WeatherItemHeader>{weather?.weather[0]?.main} <WeatherItemImage src={iconUrl} /></WeatherItemHeader>
+                    <WeatherItemText>Current condition</WeatherItemText>
+                  </WeatherItem>            
+                  <WeatherItem>
+                    <WeatherItemHeader>{weather?.main?.pressure} hpa</WeatherItemHeader>
+                    <WeatherItemText>Pressure</WeatherItemText>
+                  </WeatherItem>
+                  <WeatherItem>
+                    <WeatherItemHeader>{weather?.main?.humidity}</WeatherItemHeader>
+                    <WeatherItemText>Humidity</WeatherItemText>
+                  </WeatherItem>
+                  <WeatherItem>
+                    <WeatherItemHeader>{weather?.wind?.speed} m/s</WeatherItemHeader>
+                    <WeatherItemText>Wind</WeatherItemText>
+                  </WeatherItem>
+                </WeatherRow>
+              </WeatherWrapper>
+              <ForecastWrapper>
+                {forecastData?.map((item,index) => 
+                  <ForecastItem key = {index} item = {item} />
+                )}
+              </ForecastWrapper>
+           </Fragment> : 
+              null
+          }
+           { isFetching ?
+              <FetchingWrapper>
+                  Fetching...
+              </FetchingWrapper>
+              : null}
+           { isFailed ?
+              <FetchingWrapper>
+                  Sorry, the request failed. Try one more time
+              </FetchingWrapper>
+              : null}               
+          </RootWrapper>
+        </Fragment> 
+      </RootContainer>
+    </Context.Provider>
   );
 }
 

@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { SearchBarWrapper, SearchInput, Button } from './style';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-
-type Forecast = {
-  city: object,
-  cnt: number,
-  code: string,
-  list: { [key:string]: any }[],
-  message: number 
-}
-
+import { Context } from '../Context';
+import { SearchBarWrapper, SearchInput, Button } from './style';
+import { Forecast, Weather } from './types'
 
 const SearchBar:React.FC = () => {
   const [search, setSearch] = useState<string>('');
   const [forecast, setForecast] = useState<Forecast>();
+  const [weather, setWeather] = useState<Weather>();
+  const [context, setContext] = useContext<any>(Context);
+
   const handleKeyPress = (e: any) => {
     if(e.charCode === 13) {
       fetchInputData();
@@ -29,8 +25,11 @@ const SearchBar:React.FC = () => {
       .then(axios.spread((first, second) => { 
         const forecast = first.data;
         const weather = second.data;
+        //console.log(forecast);
+        //console.log(weather);
         setForecast(forecast);
-        //setWeather(weather);
+        setContext(weather);
+        setWeather(weather);
       }))
       .catch((error) => { 
         //setFailed(true); 
