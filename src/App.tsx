@@ -1,9 +1,235 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import axios from 'axios';
-//import ForecastItem from './ForecastItem';
-import ForecastCurrent from './ForecastCurrent';
-//import SearchBar from './SearchBar';
+import ForecastItem from './ForecastItem';
+import SearchBar from './SearchBar';
+
+const GlobalStyle = createGlobalStyle`
+  body{
+    padding: 0;
+    margin: 0;
+    font-family: Lato,Helvetica Neue,Arial,Helvetica,sans-serif ; 
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+`;
+
+const RootContainer = styled.div`
+  position: relative;
+  height: auto;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  @media only screen and (max-width : 1200px) {
+    padding: 50px 0;
+  }   
+`
+
+const RootWrapper = styled.div`
+  background: rgba(15,12,41,0.7);
+  background: -webkit-gradient(linear, left top, right top, from(rgba(15,12,41,0.7)), color-stop(rgba(48,43,99,0.7)), to(rgba(36,36,42,0.7)));
+  background: -o-linear-gradient(left, rgba(15,12,41,0.7), rgba(48,43,99,0.7), rgba(36,36,42,0.7));
+  background: linear-gradient(to right, rgba(15,12,41,0.7), rgba(48,43,99,0.7), rgba(36,36,42,0.7));
+  height: auto;
+  min-height: 100vh;
+  width: 100%;
+  padding: 50px;
+  z-index: 999;
+`
+
+const RootImageWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  @media only screen and (max-width : 1400px) {
+    height: 100%;
+  }
+`
+
+const RootImage = styled.img`
+  width: auto;
+  height: 100%;
+  @media only screen and (max-width : 1400px) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    
+  }
+`
+
+const FetchingWrapper = styled.div`
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: calc(100vh - 136px);
+  margin: 0 ;
+  font-size: 20px;
+  margin: 35px auto;
+  color: #fff;
+  width: calc(100% - 100px);
+  max-width: 1500px; 
+`
+
+const WeatherWrapper = styled.div`
+  margin: 35px auto;
+  color: #fff;
+  width: calc(100% - 100px);
+  max-width: 1500px;
+  padding: 0 ;
+`
+
+const WeatherItem = styled.div`
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 24px;
+  @media only screen and (max-width : 576px) {
+    display: -webkit-box ;
+    display: -ms-flexbox ;
+    display: flex ;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    width: calc(100% - 60px);
+    align-items: center;    
+  }  
+`
+
+const WeatherItemHeader = styled.h4`
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 23px;
+  font-weight: 400;
+  margin-bottom: 12px;
+  @media only screen and (max-width : 768px) {
+    margin: 0 8px;
+    font-size: 21px;
+  }             
+`
+
+const WeatherItemText = styled.p`
+  font-size: 16px;
+  @media only screen and (max-width : 1200px) {
+    width: 100%;
+  }
+  @media only screen and (max-width : 768px) {
+    margin: 8px 0;
+    font-size: 14px;
+  } 
+  @media only screen and (max-width : 576px) {
+    font-size: 14px;
+    font-weight: 700;
+  }   
+`
+
+const WeatherRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: calc(100%);
+  margin: 0 auto;
+  max-width: 1500px;
+  @media only screen and (max-width : 1200px) {
+    width: 100%;
+  }
+
+  @media only screen and (max-width : 1200px) {
+    flex-wrap: wrap;
+  }
+
+`
+
+const TopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  @media only screen and (max-width : 1200px) {
+    width: 100%;
+  }  
+`
+
+const TopRowItem = styled.div`
+`
+
+const TopRowTemp = styled.h1`
+  margin: 0;
+  font-size: 70px;
+  font-weight: 400;
+  @media only screen and (max-width : 768px) {
+    font-size: 24px;
+    line-height: 40px;
+  }    
+`
+
+const TopRowDate = styled.h3``
+
+const TopRowLocation = styled.h2`
+  margin: 0;
+  font-size: 56px;
+  line-height: 90px;
+  font-weight: 400;
+  @media only screen and (max-width : 768px) {
+    font-size: 24px;
+    line-height: 40px;
+  }
+  @media only screen and (max-width : 576px) {
+    text-align: right;
+  }      
+`
+
+const ForecastWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0;
+  @media only screen and (max-width : 1400px) {
+    width: calc(100% - 100px);
+  }
+  @media only screen and (max-width : 992px) {
+    width: calc(100% - 40px);    
+  }
+  @media only screen and (max-width : 768px) {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;   
+  }            
+`
+
+const TopRowImage = styled.img`
+  width: 60px;
+  height: auto;
+`
+
+const WeatherItemImage = styled.img`
+  line-height: 32px;
+  height: 32px;
+  margin-left: 3px;
+  @media only screen and (max-width : 576px) {
+    height: 22px ;
+  }
+`
 
 type Weather = {
   base: string,
@@ -114,22 +340,6 @@ const App:React.FC = () => {
     }
   },[forecast, weather])
 
-  const defaultWeather = () => {
-
-  }
-
-  const getForecast = () => {
-
-  }
-
-  const getCity = () => {
-
-  }
-
-  const consoleData = () => {
-    
-  }
-
   const fetchData = () => {
       setFailed(false);
       let iconCode = weather?.weather[0]?.icon;
@@ -203,18 +413,6 @@ const App:React.FC = () => {
       });
     }
 
-  const GlobalStyle = createGlobalStyle`
-    * {
-      box-sizing: border-box;
-      font-family: 'Open Sans', sans-serif;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-    }
-  `;
-
   const fetchInputData = () => {
     const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
     const url = `http://api.openweathermap.org/data/2.5/forecast?q=${search}&appid=${API_KEY}&units=metric`;
@@ -241,98 +439,84 @@ const App:React.FC = () => {
   }
 
   return (
-      <>
+    <RootContainer>
+      <GlobalStyle />
       <Fragment>
-        <div id="root-image">
-          <img src={currentBg}/>
-        </div>
-        <div id="root-wrapper">
-          <div className="input-wrapper">
-            <input value={search} placeholder="search for city" onKeyPress={(e) => handleKeyPress(e)} className="main-input" onChange={(e) => setSearch(e.target.value)} ></input> 
-            <button onClick={() => fetchInputData()}>Search</button>
-          </div>
+        <RootImageWrapper>
+          <RootImage src={currentBg}/>
+        </RootImageWrapper>
+        <RootWrapper>
+          <SearchBar />
          {isVisible ?
           <Fragment>        
-            <div className="weather-wrapper">
-              <div  className="top-row" >
-                <div className="column-header">
-                  <h1>{Math.round(Number(weather?.main?.temp))}° <img className="top-icon" src={iconUrl} /></h1>
-                  <h3>Today: {new Date().toLocaleDateString()}</h3>
-                </div>
-                <div className="column-header">
-                  <h2>{weather?.name}, {weather?.sys?.country}</h2>
-                </div>
-              </div>          
-              <div  className="weather-row">
-                <div className="weather-column" >
-                  <h4 className="weather-header">{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </h4>
-                  <p className="weather-descr">High / Low</p>
-                </div>
-                <div className="weather-column">
-                  <h4 className="weather-header">{Math.round(Number(weather?.main?.feels_like))}°C </h4>
-                  <p className="weather-descr">Feels like</p>
-                </div>
-                <div className="weather-column">
-                  <h4 className="weather-header">{timestrSunrise}</h4>
-                  <p className="weather-descr">Sunrise</p>
-                </div>
-                <div className="weather-column">
-                  <h4 className="weather-header">{timestrSunset}</h4>
-                  <p className="weather-descr">Sunset</p>
-                </div>              
-              </div>
-              <div className="weather-row">
-                <div className="weather-column">
-                  <h4 className="weather-header">{weather?.weather[0]?.main} <img src={iconUrl} /></h4>
-                  <p className="weather-descr">Current condition</p>
-                </div>            
-                <div className="weather-column">
-                  <h4 className="weather-header">{weather?.main?.pressure} hpa</h4>
-                  <p className="weather-descr">Pressure</p>
-                </div>
-                <div className="weather-column">
-                  <h4 className="weather-header">{weather?.main?.humidity}</h4>
-                  <p className="weather-descr">Humidity</p>
-                </div>
-                <div className="weather-column">
-                  <h4 className="weather-header">{weather?.wind?.speed} m/s</h4>
-                  <p className="weather-descr">Wind</p>
-                </div>
-              </div>
-            </div>
-            <div className="forecast-wrapper">
-              {forecastData?.map((item,index) =>
-                <div key={index} className="forecast-item">
-                  <div className="header-wrapper">
-                    <h2>{item.weekday}, {item.day} </h2>                
-                  </div>
-                  <div className="icon-wrapper">
-                    <img src={item.icon}/>
-                  </div>
-                  <div className="icon-description">
-                      <h4>{Math.round(Number(item.max))}°C / {Math.round(Number(item.min))}°C</h4>
-                      <p>{item.currentName} ({item.currentDescription})</p>
-                      <p>Wind speed: {item.wind} m/s</p>
-                  </div>
-                </div>
+            <WeatherWrapper>
+              <TopRow>
+                <TopRowItem>
+                  <TopRowTemp>{Math.round(Number(weather?.main?.temp))}° <TopRowImage src={iconUrl} /></TopRowTemp>
+                  <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>
+                </TopRowItem>
+                <TopRowItem>
+                  <TopRowLocation>{weather?.name}, {weather?.sys?.country}</TopRowLocation>
+                </TopRowItem>
+              </TopRow>          
+              <WeatherRow>
+                <WeatherItem>
+                  <WeatherItemHeader>{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </WeatherItemHeader>
+                  <WeatherItemText>High / Low</WeatherItemText>
+                </WeatherItem>
+                <WeatherItem>
+                  <WeatherItemHeader>{Math.round(Number(weather?.main?.feels_like))}°C </WeatherItemHeader>
+                  <WeatherItemText>Feels like</WeatherItemText>
+                </WeatherItem>
+                <WeatherItem>
+                  <WeatherItemHeader>{timestrSunrise}</WeatherItemHeader>
+                  <WeatherItemText>Sunrise</WeatherItemText>
+                </WeatherItem>
+                <WeatherItem>
+                  <WeatherItemHeader>{timestrSunset}</WeatherItemHeader>
+                  <WeatherItemText>Sunset</WeatherItemText>
+                </WeatherItem>              
+              </WeatherRow>
+              <WeatherRow>
+                <WeatherItem>
+                  <WeatherItemHeader>{weather?.weather[0]?.main} <WeatherItemImage src={iconUrl} /></WeatherItemHeader>
+                  <WeatherItemText>Current condition</WeatherItemText>
+                </WeatherItem>            
+                <WeatherItem>
+                  <WeatherItemHeader>{weather?.main?.pressure} hpa</WeatherItemHeader>
+                  <WeatherItemText>Pressure</WeatherItemText>
+                </WeatherItem>
+                <WeatherItem>
+                  <WeatherItemHeader>{weather?.main?.humidity}</WeatherItemHeader>
+                  <WeatherItemText>Humidity</WeatherItemText>
+                </WeatherItem>
+                <WeatherItem>
+                  <WeatherItemHeader>{weather?.wind?.speed} m/s</WeatherItemHeader>
+                  <WeatherItemText>Wind</WeatherItemText>
+                </WeatherItem>
+              </WeatherRow>
+            </WeatherWrapper>
+            <ForecastWrapper>
+              {forecastData?.map((item,index) => 
+                <ForecastItem key = {index} item = {item} />
               )}
-            </div>
+            </ForecastWrapper>
          </Fragment> : 
             null
         }
          { isFetching ?
-            <div className="weather-wrapper fetching-wrapper">
+            <FetchingWrapper>
                 Fetching...
-            </div>
+            </FetchingWrapper>
             : null}
          { isFailed ?
-            <div className="weather-wrapper fetching-wrapper">
+            <FetchingWrapper>
                 Sorry, the request failed. Try one more time
-            </div>
+            </FetchingWrapper>
             : null}               
-        </div>
+        </RootWrapper>
       </Fragment> 
-    </>
+    </RootContainer>
   );
 }
 
