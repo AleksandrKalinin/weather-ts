@@ -9,7 +9,7 @@ export type Weather = {
   name: string,
   rain: object,
   sys: {
-    country: 'string',
+    country: string,
     sunrise: number,
     sunset: number
   },

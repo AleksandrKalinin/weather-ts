@@ -10,7 +10,7 @@ type Weather = {
   name: string,
   rain: object,
   sys: {
-    country: 'string',
+    country: string,
     sunrise: number,
     sunset: number
   },
@@ -28,25 +28,42 @@ type Forecast = {
   message: number 
 }
 
-type ForecastData = {
-  formattedTime?: string,
-  weekday?: string,
-  day?: number,
-  temp?: number,
-  max?: number,
-  min?: number,
-  currentName?: string,
-  currentDescription?: string,
-  icon?: string,
-  wind?: number  
+type setWeather = (value: any) => void;
+
+type setForecast = (value: any) => void;
+
+type CurrentContextValue = [Weather?, React.Dispatch<React.SetStateAction<Weather | undefined>>?, 
+                            Forecast?, React.Dispatch<React.SetStateAction<Forecast | undefined>>?];
+
+const initialWeather = 
+  {
+    base: '',
+    clouds: {},
+    cod: 0,
+    coord: {},
+    dt: 0,
+    id: 0,
+    main: {},
+    name: '',
+    rain: {},
+    sys: {
+      country: '',
+      sunrise: 0,
+      sunset: 0
+    },
+    timezone: 0,
+    visibility: 0,
+    weather: [],
+    wind: { }    
+  }
+
+const initialForecast = {
+  city: {},
+  cnt: 0,
+  code: '',
+  list: [],
+  message: 0  
 }
 
-type ContextData = {
-	weather: Weather,
-	forecast: Forecast,
-	isFetching: boolean,
-	isFailed: boolean,
-	isVisible: boolean
-}
 
-export const Context = React.createContext<any[]>([]);
+export const Context = React.createContext<CurrentContextValue>([initialWeather, () => null, initialForecast, () => null]);

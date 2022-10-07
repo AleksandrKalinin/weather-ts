@@ -6,10 +6,8 @@ import { Forecast, Weather } from './types'
 
 const SearchBar:React.FC = () => {
   const [search, setSearch] = useState<string>('');
-  const [forecast, setForecast] = useState<Forecast>();
-  const [weather, setWeather] = useState<Weather>();
-  const [contextWeather, setContextWeather, contextForecast, setContextForecast] = useContext(Context);
-
+  const [weather, setWeather, forecast, setForecast] = useContext(Context);
+  console.log(weather);
   const handleKeyPress = (e: any) => {
     if(e.charCode === 13) {
       fetchInputData();
@@ -25,10 +23,13 @@ const SearchBar:React.FC = () => {
       .then(axios.spread((first, second) => { 
         const forecast = first.data;
         const weather = second.data;
-        setForecast(forecast);
-        setContextWeather(weather)
-        setContextForecast(forecast);
-        setWeather(weather);
+        if(typeof forecast !== 'undefined' &&  
+           typeof weather !== 'undefined' && 
+           typeof setForecast !== 'undefined' && 
+           typeof setWeather !== 'undefined') {
+          setForecast(forecast);
+          setWeather(weather);
+        }
       }))
       .catch((error) => { 
         //setFailed(true); 
