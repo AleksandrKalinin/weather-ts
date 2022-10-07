@@ -49,4 +49,4 @@ type ContextData = {
 	isVisible: boolean
 }
 
-export const Context = React.createContext<null>(null);
+export const Context = React.createContext<any[]>([]);

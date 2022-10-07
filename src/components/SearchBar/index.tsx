@@ -8,7 +8,7 @@ const SearchBar:React.FC = () => {
   const [search, setSearch] = useState<string>('');
   const [forecast, setForecast] = useState<Forecast>();
   const [weather, setWeather] = useState<Weather>();
-  const [context, setContext] = useContext<any>(Context);
+  const [contextWeather, setContextWeather, contextForecast, setContextForecast] = useContext(Context);
 
   const handleKeyPress = (e: any) => {
     if(e.charCode === 13) {
@@ -25,10 +25,9 @@ const SearchBar:React.FC = () => {
       .then(axios.spread((first, second) => { 
         const forecast = first.data;
         const weather = second.data;
-        //console.log(forecast);
-        //console.log(weather);
         setForecast(forecast);
-        setContext(weather);
+        setContextWeather(weather)
+        setContextForecast(forecast);
         setWeather(weather);
       }))
       .catch((error) => { 

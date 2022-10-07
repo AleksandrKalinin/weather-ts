@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 
 import React, { useState, useEffect, useContext, Fragment } from 'react';
 import axios from 'axios';
@@ -34,7 +34,8 @@ type ContextValue = {
 }
 
 const App:React.FC = () => {
-  const [context, setContext] = useState<any>();
+  const [contextWeather, setContextWeather] = useState<any>();
+  const [contextForecast, setContextForecast] = useState<any>();
   const [forecast, setForecast] = useState<Forecast>();
   const [forecastData, setForecastData] = useState<ForecastData[]>();
   const [coords, setCoords] = useState<number[]>([]);
@@ -81,21 +82,20 @@ const App:React.FC = () => {
 
   useEffect(() => {
     if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
-      let data = fetchData();
+      fetchData();
       setVisible(true);
       setFetching(false);
     }
   },[forecast, weather])
 
   useEffect(() => {
-    if(typeof context !== 'undefined') {
-      setWeather(context);
-      //let data = fetchData();
+    if(typeof contextForecast !== 'undefined' && typeof contextWeather !== 'undefined') {
+      setWeather(contextWeather);
+      setForecast(contextForecast);
       setVisible(true);
       setFetching(false);
-      console.log(context);
     }
-  },[context])
+  },[contextWeather])
 
   const fetchData = () => {
       setFailed(false);
@@ -189,7 +189,7 @@ const App:React.FC = () => {
   }
 
   return (
-    <Context.Provider value={[context, setContext]}>
+    <Context.Provider value={[contextWeather, setContextWeather, contextForecast, setContextForecast]}>
       <RootContainer>
         <GlobalStyle />
         <Fragment>
