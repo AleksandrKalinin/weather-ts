@@ -27,12 +27,12 @@ import SearchBar from '../SearchBar';
 const App:React.FC = () => {
   const [forecast, setForecast] = useState<Forecast>();
   const [weather, setWeather] = useState<Weather>();
-  const [forecastData, setForecastData] = useState<ForecastData[]>();
-  const [coords, setCoords] = useState<number[]>([]);
-
   const [isFetching, setFetching] = useState<boolean>(true);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [isFailed, setFailed] = useState<boolean>(false);
+
+  const [forecastData, setForecastData] = useState<ForecastData[]>();
+  const [coords, setCoords] = useState<number[]>([]);
   const [iconUrl, setIconUrl] = useState<string>('');
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
@@ -154,7 +154,7 @@ const App:React.FC = () => {
     }
 
   return (
-    <Context.Provider value={[weather, setWeather, forecast, setForecast]}>
+    <Context.Provider value={[weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed]}>
       <RootContainer>
         <GlobalStyle />
         <Fragment>

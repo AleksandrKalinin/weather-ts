@@ -33,7 +33,10 @@ type setWeather = (value: any) => void;
 type setForecast = (value: any) => void;
 
 type CurrentContextValue = [Weather?, React.Dispatch<React.SetStateAction<Weather | undefined>>?, 
-                            Forecast?, React.Dispatch<React.SetStateAction<Forecast | undefined>>?];
+                            Forecast?, React.Dispatch<React.SetStateAction<Forecast | undefined>>?,
+                            boolean?, React.Dispatch<React.SetStateAction<any>>?,
+                            boolean?, React.Dispatch<React.SetStateAction<any>>?,
+                            boolean?, React.Dispatch<React.SetStateAction<any>>?];
 
 const initialWeather = 
   {
@@ -66,4 +69,10 @@ const initialForecast = {
 }
 
 
-export const Context = React.createContext<CurrentContextValue>([initialWeather, () => null, initialForecast, () => null]);
+export const Context = React.createContext<CurrentContextValue>([
+                                                                  initialWeather, () => null, 
+                                                                  initialForecast, () => null,
+                                                                  false, () => null,
+                                                                  true, () => null,
+                                                                  false, () => null,
+                                                                ]);

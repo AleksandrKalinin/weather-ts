@@ -6,7 +6,7 @@ import { Forecast, Weather } from './types'
 
 const SearchBar:React.FC = () => {
   const [search, setSearch] = useState<string>('');
-  const [weather, setWeather, forecast, setForecast] = useContext(Context);
+  const [weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed] = useContext(Context);
   console.log(weather);
   const handleKeyPress = (e: any) => {
     if(e.charCode === 13) {
@@ -32,9 +32,13 @@ const SearchBar:React.FC = () => {
         }
       }))
       .catch((error) => { 
-        //setFailed(true); 
-        //setFetching(false);
-        //setVisible(false)
+        if(typeof setVisible !== 'undefined' &&
+           typeof setFetching !== 'undefined' && 
+           typeof setFailed !== 'undefined') {
+            setFailed(true); 
+            setFetching(false);
+            setVisible(false);
+        }
       });
   }
 
