@@ -19,7 +19,7 @@ export const WeatherWrapper = styled.div`
   height: calc(100%- 100px);
   min-height: 600px;
   max-height: 600px;
-  max-width: 1500px;
+  max-width: 1000px;
   padding: 0;
   background: #1860BE;
   padding: 50px;

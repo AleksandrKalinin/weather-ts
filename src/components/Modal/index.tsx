@@ -18,14 +18,10 @@ import {  ModalWrapper,
 import Icon from './assets/close.png';
 
 const Modal:React.FC<Props> = (props) => {
-  //const weather = props.weather;
+  const modalData = props.modalData;
   const iconUrl = props.iconUrl;
-  const timestrSunrise = props.timestrSunrise;
-  const timestrSunset = props.timestrSunset;
-  const { value, value2 } = React.useContext(Context);
-  const [weather, setWeather] = value;
+  const { value2 } = useContext(Context);
   const [isModalOpen, setModalState] = value2;
-
   const closeModal = () => {
     document.body.style.overflow = 'unset';    
     setModalState(false);
@@ -39,50 +35,42 @@ const Modal:React.FC<Props> = (props) => {
         </IconImageWrapper>
         <TopRow>
           <TopRowItem>
-            <TopRowTemp>{Math.round(Number(weather?.main?.temp))}°
+            <TopRowTemp>{Math.round(Number(modalData.temp))}°
               <TopRowImage>
                 {iconUrl}
               </TopRowImage>
              </TopRowTemp>
-            <TopRowDate>{new Date().toLocaleDateString()}</TopRowDate>
+            <TopRowDate>{modalData.weekday} : {modalData.formattedDate.toLocaleDateString()}</TopRowDate>
           </TopRowItem>
           <TopRowItem>
-            <TopRowLocation>{weather?.name}, {weather?.sys?.country}</TopRowLocation>
+            <TopRowLocation>{modalData.city}, {modalData.country}</TopRowLocation>
           </TopRowItem>
         </TopRow>          
         <WeatherRow>
           <WeatherItem>
-            <WeatherItemHeader>{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </WeatherItemHeader>
+            <WeatherItemHeader>{Math.round(Number(modalData.max))}°C / {Math.round(Number(modalData.min))}°C </WeatherItemHeader>
             <WeatherItemText>High / Low</WeatherItemText>
           </WeatherItem>
           <WeatherItem>
-            <WeatherItemHeader>{Math.round(Number(weather?.main?.feels_like))}°C </WeatherItemHeader>
+            <WeatherItemHeader>{Math.round(Number(modalData.feelsLike))}°C </WeatherItemHeader>
             <WeatherItemText>Feels like</WeatherItemText>
           </WeatherItem>
           <WeatherItem>
-            <WeatherItemHeader>{timestrSunrise}</WeatherItemHeader>
-            <WeatherItemText>Sunrise</WeatherItemText>
-          </WeatherItem>
-          <WeatherItem>
-            <WeatherItemHeader>{timestrSunset}</WeatherItemHeader>
-            <WeatherItemText>Sunset</WeatherItemText>
-          </WeatherItem>              
+            <WeatherItemHeader>{modalData.currentName}</WeatherItemHeader>
+            <WeatherItemText>Current condition</WeatherItemText>
+          </WeatherItem>            
         </WeatherRow>
         <WeatherRow>
           <WeatherItem>
-            <WeatherItemHeader>{weather?.weather[0]?.main}</WeatherItemHeader>
-            <WeatherItemText>Current condition</WeatherItemText>
-          </WeatherItem>            
-          <WeatherItem>
-            <WeatherItemHeader>{weather?.main?.pressure} hpa</WeatherItemHeader>
+            <WeatherItemHeader>{modalData.pressure} hpa</WeatherItemHeader>
             <WeatherItemText>Pressure</WeatherItemText>
           </WeatherItem>
           <WeatherItem>
-            <WeatherItemHeader>{weather?.main?.humidity}</WeatherItemHeader>
+            <WeatherItemHeader>{modalData.humidity}</WeatherItemHeader>
             <WeatherItemText>Humidity</WeatherItemText>
           </WeatherItem>
           <WeatherItem>
-            <WeatherItemHeader>{weather?.wind?.speed} m/s</WeatherItemHeader>
+            <WeatherItemHeader>{modalData.wind} m/s</WeatherItemHeader>
             <WeatherItemText>Wind</WeatherItemText>
           </WeatherItem>
         </WeatherRow>

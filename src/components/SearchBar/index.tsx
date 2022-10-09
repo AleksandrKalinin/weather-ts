@@ -5,7 +5,7 @@ import { SearchBarWrapper, SearchInput, Button } from './style';
 
 const SearchBar:React.FC = () => {
   const [search, setSearch] = useState<string>('');
-  const { value, value2 } = useContext(Context);
+  const { value } = useContext(Context);
 
   const [weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed] = value;
   const handleKeyPress = (e: any) => {

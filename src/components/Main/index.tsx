@@ -42,7 +42,7 @@ const App:React.FC = () => {
   const [isFailed, setFailed] = useState<boolean>(false);
   const [isModalOpen, setModalState] = useState<boolean>(false);
   const [forecastData, setForecastData] = useState<ForecastData[]>();
-  const [modalData, setModalData] = useState<any>();
+  const [modalData, setModalData] = useState<any>({});
   const [iconUrl, setIconUrl] = useState<any>(tempIconComponent);
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
@@ -53,7 +53,7 @@ const App:React.FC = () => {
       const options = {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 10000
+        maximumAge: 60000
       };      
       navigator.geolocation.watchPosition((pos) => {
         let lat = pos.coords.latitude;
@@ -83,8 +83,7 @@ const App:React.FC = () => {
   const fetchData = useCallback(() => {
       setFailed(false);
       if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
-        let iconCode = weather?.weather[0]?.icon;
-        let iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";      
+        let iconUrl = "https://openweathermap.org/img/w/" + weather?.weather[0]?.icon + ".png";      
         let sunrise = weather?.sys?.sunrise;
         let sunset = weather?.sys?.sunset;
         let dateSunrise = new Date(sunrise! * 1000);
@@ -94,7 +93,6 @@ const App:React.FC = () => {
         let currentForecast = forecast!.list.slice();
         let newForecast = [];
         let newObj:NewObj = {};
-        let advancedData:any = {};
         currentForecast.map((item,index) =>{
           let date = new Date(item.dt * 1000);
           let hours = date.getHours();
@@ -107,6 +105,7 @@ const App:React.FC = () => {
           item.dt = formattedTime;
           item.weekday = weekday;
           item.day = day;
+          item.formattedDate = date;
         }) 
         for (let i = 0; i < currentForecast.length; i+=8) {
           let iconCode = currentForecast[i].weather[0].icon;
@@ -141,19 +140,22 @@ const App:React.FC = () => {
           }
           newObj["city"] = forecast.city.name;
           newObj["country"] = forecast.city.country;
-          newObj["timestrSunset"] = timestrSunset;
-          newObj["timestrSunrise"] = timestrSunrise;
+          newObj["sunrise"] = forecast.city.sunrise;
+          newObj["sunset"] = forecast.city.sunset;
           newObj["formattedTime"] = currentForecast[i].dt;
+          newObj["formattedDate"] = currentForecast[i].formattedDate;
           newObj["weekday"] = currentForecast[i].weekday;
           newObj["day"] = currentForecast[i].day;
           newObj["temp"] = currentForecast[i].main.temp;
           newObj["max"] = currentForecast[i].main.temp_max;
           newObj["min"] = currentForecast[i].main.temp_min;
+          newObj["humidity"] = currentForecast[i].main.humidity;
+          newObj["pressure"] = currentForecast[i].main.pressure;
+          newObj["feelsLike"] = currentForecast[i].main.feels_like;
           newObj["currentName"] = currentForecast[i].weather[0].main;
           newObj["currentDescription"] = currentForecast[i].weather[0].description;
           newObj["icon"] = svgIcon;
           newObj["wind"] = currentForecast[i].wind.speed;
-          newObj["advancedData"] = advancedData;
           newForecast.push(newObj);
           newObj = {};
         }
@@ -214,14 +216,6 @@ const App:React.FC = () => {
     }
   },[forecast, weather, fetchData])
 
-  const openModal = () => {
-    console.log(weather);
-    console.log(forecast);
-    console.log(forecastData);
-    document.body.style.overflow = 'hidden';    
-    setModalState(!isModalOpen);
-  }
-
   return (
     <Context.Provider value = {{ value: [weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed ], 
                                  value2: [isModalOpen, setModalState],
@@ -235,7 +229,7 @@ const App:React.FC = () => {
           </RootImageWrapper>
           <RootWrapper>
              {isModalOpen ?
-                <Modal weather={weather} iconUrl={iconUrl} timestrSunset={timestrSunset} timestrSunrise={timestrSunrise} />
+                <Modal modalData={modalData} weather={weather} iconUrl={iconUrl} timestrSunset={timestrSunset} timestrSunrise={timestrSunrise} />
               : null}
              <SearchBar />
              {isVisible ?
