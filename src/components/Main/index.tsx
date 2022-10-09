@@ -21,22 +21,30 @@ import { GlobalStyle,
           TopRowImage, 
           WeatherItemImage   } from './style';
 import { Weather, Forecast, ForecastData, NewObj } from './types';
+import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle } from '../Icons/Icons';
 import ForecastItem from '../ForecastItem';
 import SearchBar from '../SearchBar';
+import MistyBG from './assets/misty.jpg';
+import CloudyBG from './assets/cloudy.jpg';
+import ClearBG from './assets/clear.jpg';
+
 
 const App:React.FC = () => {
+  let tempIconComponent = () => {
+    return(<p>Empty</p>);
+  };  
   const [forecast, setForecast] = useState<Forecast>();
   const [weather, setWeather] = useState<Weather>();
   const [isFetching, setFetching] = useState<boolean>(true);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [isFailed, setFailed] = useState<boolean>(false);
-
+  const [iconComponent, setIconComponent] = useState<any>(tempIconComponent);
   const [forecastData, setForecastData] = useState<ForecastData[]>();
   const [coords, setCoords] = useState<number[]>([]);
-  const [iconUrl, setIconUrl] = useState<string>('');
+  const [iconUrl, setIconUrl] = useState<any>(tempIconComponent);
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
-  const [currentBg, setCurrentBg] = useState<string>('sunny.jpg');
+  const [currentBg, setCurrentBg] = useState<string>('./sunny.jpg');
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
@@ -77,7 +85,6 @@ const App:React.FC = () => {
     }
   },[forecast, weather])
 
-
   const fetchData = () => {
       setFailed(false);
       if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
@@ -107,7 +114,35 @@ const App:React.FC = () => {
         }) 
         for (let i = 0; i < currentForecast.length; i+=8) {
           let iconCode = currentForecast[i].weather[0].icon;
-          let iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png";  
+          let forecastCondition = currentForecast[i].weather[0].main;
+          let svgIcon;
+          if(forecastCondition === 'Rain') {
+            svgIcon = Rain;            
+          } else if(forecastCondition === 'Drizzle') {            
+            svgIcon = Drizzle;
+          } else if(forecastCondition === 'Clouds') {
+            svgIcon = Clouds;
+          } else if(forecastCondition === 'Hail') {            
+            svgIcon = Hail;
+          } else if(forecastCondition === 'Snow') {
+            svgIcon = Snow;
+          } else if(forecastCondition === 'Fog') {
+            svgIcon = Fog;                           
+          } else if(forecastCondition === 'Thunderstorm') {
+            svgIcon = Thunderstorm;
+          } else if(forecastCondition === 'Haze') {            
+            svgIcon = Haze;
+          } else if(forecastCondition === 'Mist') {
+            svgIcon = Mist;
+          } else if(forecastCondition === 'Tornado') {
+            svgIcon = Tornado;
+          } else if(forecastCondition === 'Smoke') {
+            svgIcon = Smoke;
+          } else if(forecastCondition === 'Dust') {
+            svgIcon = Dust;                          
+          } else {
+            svgIcon = Clear;
+          }
           newObj["formattedTime"] = currentForecast[i].dt;
           newObj["weekday"] = currentForecast[i].weekday;
           newObj["day"] = currentForecast[i].day;
@@ -116,28 +151,63 @@ const App:React.FC = () => {
           newObj["min"] = currentForecast[i].main.temp_min;
           newObj["currentName"] = currentForecast[i].weather[0].main;
           newObj["currentDescription"] = currentForecast[i].weather[0].description;
-          newObj["icon"] = iconUrl;
+          newObj["icon"] = svgIcon;
           newObj["wind"] = currentForecast[i].wind.speed;
           newForecast.push(newObj);
           newObj = {};
         }
         let condition = weather?.weather[0]?.main;
-        let element = document.getElementById('root-wrapper')
+        if(condition === 'Rain') {
+          iconUrl = Rain;
+
+        } else if(condition === 'Drizzle') {            
+          iconUrl = Drizzle;
+        } else if(condition === 'Clouds') {
+          iconUrl = Clouds;
+          setCurrentBg(CloudyBG);
+        } else if(condition === 'Hail') {            
+          iconUrl = Hail;
+        } else if(condition === 'Snow') {
+          iconUrl = Snow;
+        } else if(condition === 'Fog') {
+          iconUrl = Fog;                           
+        } else if(condition === 'Thunderstorm') {
+          iconUrl = Thunderstorm;
+        } else if(condition === 'Haze') {            
+          iconUrl = Haze;
+        } else if(condition === 'Mist') {
+          iconUrl = Mist;
+        } else if(condition === 'Tornado') {
+          iconUrl = Tornado;
+        } else if(condition === 'Smoke') {
+          iconUrl = Smoke;
+        } else if(condition === 'Dust') {
+          iconUrl = Dust;                          
+        } else {
+          iconUrl = Clear;
+          setCurrentBg(ClearBG);
+        }
+        /*
         if (condition === "Clouds") {
-          setCurrentBg('cloudy.jpg');
+          setCurrentBg('./cloudy.jpg');
+          iconUrl = './icons/cloudy.svg';
         }
         else if (condition === "Rain" || condition === "Drizzle") {
-          setCurrentBg('rainy.jpg');
+          setCurrentBg('./rainy.jpg');
+          iconUrl = './icons/rain.svg';
         }
         else if(condition === "Snow") {
-          setCurrentBg('snowy.jpg');
+          setCurrentBg('./snowy.jpg');
+          iconUrl = './icons/snow.svg';
         }
         else if (condition === "Mist") {
-          setCurrentBg('misty.jpg');
+          setCurrentBg('./misty.jpg');
+          iconUrl = './icons/fog.svg';
         }      
         else{
-          setCurrentBg('sunny.jpg');
-        }
+          setCurrentBg('./sunny.jpg');
+          iconUrl = './icons/clear-day.svg';
+        } */
         setForecastData(newForecast);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
@@ -168,7 +238,11 @@ const App:React.FC = () => {
               <WeatherWrapper>
                 <TopRow>
                   <TopRowItem>
-                    <TopRowTemp>{Math.round(Number(weather?.main?.temp))}° <TopRowImage src={iconUrl} /></TopRowTemp>
+                    <TopRowTemp>{Math.round(Number(weather?.main?.temp))}°
+                      <TopRowImage>
+                        {iconUrl}
+                      </TopRowImage>
+                     </TopRowTemp>
                     <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>
                   </TopRowItem>
                   <TopRowItem>
@@ -195,7 +269,7 @@ const App:React.FC = () => {
                 </WeatherRow>
                 <WeatherRow>
                   <WeatherItem>
-                    <WeatherItemHeader>{weather?.weather[0]?.main} <WeatherItemImage src={iconUrl} /></WeatherItemHeader>
+                    <WeatherItemHeader>{weather?.weather[0]?.main}</WeatherItemHeader>
                     <WeatherItemText>Current condition</WeatherItemText>
                   </WeatherItem>            
                   <WeatherItem>
@@ -214,7 +288,7 @@ const App:React.FC = () => {
               </WeatherWrapper>
               <ForecastWrapper>
                 {forecastData?.map((item,index) => 
-                  <ForecastItem key = {index} item = {item} />
+                  <ForecastItem key = {index} item = {item} IconComponent = {iconComponent} />
                 )}
               </ForecastWrapper>
            </Fragment> : 

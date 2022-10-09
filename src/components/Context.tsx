@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React from 'react';
 type Weather = {
   base: string,
   clouds: object,
@@ -27,10 +27,6 @@ type Forecast = {
   list: { [key:string]: any }[],
   message: number 
 }
-
-type setWeather = (value: any) => void;
-
-type setForecast = (value: any) => void;
 
 type CurrentContextValue = [Weather?, React.Dispatch<React.SetStateAction<Weather | undefined>>?, 
                             Forecast?, React.Dispatch<React.SetStateAction<Forecast | undefined>>?,

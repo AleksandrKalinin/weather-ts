@@ -24,10 +24,11 @@ export const RootContainer = styled.div`
 `
 
 export const RootWrapper = styled.div`
-  background: rgba(15,12,41,0.7);
-  background: -webkit-gradient(linear, left top, right top, from(rgba(15,12,41,0.7)), color-stop(rgba(48,43,99,0.7)), to(rgba(36,36,42,0.7)));
-  background: -o-linear-gradient(left, rgba(15,12,41,0.7), rgba(48,43,99,0.7), rgba(36,36,42,0.7));
-  background: linear-gradient(to right, rgba(15,12,41,0.7), rgba(48,43,99,0.7), rgba(36,36,42,0.7));
+  background: rgb(24,96,190);
+  background: -moz-linear-gradient(90deg, rgba(24,96,190,0.8) 0%, rgba(37,149,234,0.8) 100%);
+  background: -webkit-linear-gradient(90deg, rgba(24,96,190,0.8) 0%, rgba(37,149,234,0.8) 100%);
+  background: linear-gradient(90deg, rgba(24,96,190,0.8) 0%, rgba(37,149,234,0.8) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1860be",endColorstr="#2595ea",GradientType=1);
   height: auto;
   min-height: 100vh;
   width: 100%;
@@ -170,6 +171,7 @@ export const TopRowTemp = styled.h1`
   margin: 0;
   font-size: 70px;
   font-weight: 400;
+  display: flex;
   @media only screen and (max-width : 768px) {
     font-size: 24px;
     line-height: 40px;
@@ -213,9 +215,10 @@ export const ForecastWrapper = styled.div`
   }            
 `
 
-export const TopRowImage = styled.img`
-  width: 60px;
-  height: auto;
+export const TopRowImage = styled.div`
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
 `
 
 export const WeatherItemImage = styled.img`

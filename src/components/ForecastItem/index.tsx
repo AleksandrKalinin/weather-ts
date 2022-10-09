@@ -1,6 +1,4 @@
-import React, {useEffect} from 'react';
-import styled from 'styled-components';
-import { Context } from '../Context';
+import React from 'react';
 import { ForecastItemWrapper, 
         Header, 
         Title, 
@@ -11,14 +9,15 @@ import { ForecastItemWrapper,
         Image } from './style';
 import { Props } from './types';
 
-const ForecastItem:React.FC<Props> = (props) => {
+const ForecastItem:React.FC<Props> = (props, IconComponent: IconComponent) => {
+  let icon = props.item.icon();
   return (
     <ForecastItemWrapper>
       <Header>
         <Title>{props.item.weekday}, {props.item.day} </Title>                
       </Header>
       <IconWrapper>
-        <Image src={props.item.icon}/>
+        {icon}
       </IconWrapper>
       <Description>
           <Subtitle>{Math.round(Number(props.item.max))}°C / {Math.round(Number(props.item.min))}°C</Subtitle>

@@ -23,13 +23,15 @@ export const Button = styled.button`
   border-radius: none;
   margin-left: 5px;
   z-index: 999;
-  background: #2595EA;
+  background: #2D48A2;
   border: none;
   height: 36px;
   cursor: pointer;
   border-radius: 3px;
   margin-top: -1px;
+  transition: .2s ease;
   &:hover {
-    background: #2185D0;
+    background: #FFF;
+    color: #2D48A2
   }
 `

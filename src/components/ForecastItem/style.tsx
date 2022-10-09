@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ForecastItemWrapper = styled.div`
   width: 285px;
   height: 300px;
-  background: rgb(46, 46, 70);
+  background: #313A94;
   border: 1px solid #fff;
   color: #fff;
   opacity: 0.8;
@@ -36,6 +36,10 @@ export const IconWrapper = styled.div`
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  margin: 0 auto;
   @media only screen and (max-width : 992px) {
     width: 50px;
     height: 50px;
