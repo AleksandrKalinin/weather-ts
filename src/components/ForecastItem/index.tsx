@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ForecastItemWrapper, 
         Header, 
         Title, 
         IconWrapper, 
         Description, 
         Subtitle, 
-        Text, 
-        Image } from './style';
+        Text } from './style';
 import { Props } from './types';
+import { Context } from '../Context';
 
-const ForecastItem:React.FC<Props> = (props, IconComponent: IconComponent) => {
+const ForecastItem:React.FC<Props> = (props) => {
   let icon = props.item.icon();
+  const { value2, value3 } = useContext(Context);
+  const [isModalOpen, setModalState] = value2;
+  const [modalData, setModalData] = value3;
+  
+  const openModal = () => {
+    setModalState(true);
+    setModalData(props.item);
+  }
+
   return (
-    <ForecastItemWrapper>
+    <ForecastItemWrapper onClick={() => openModal()}>
       <Header>
         <Title>{props.item.weekday}, {props.item.day} </Title>                
       </Header>

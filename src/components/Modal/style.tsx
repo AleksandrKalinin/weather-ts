@@ -1,91 +1,29 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 
-export const GlobalStyle = createGlobalStyle`
-  body{
-    padding: 0;
-    margin: 0;
-    font-family: Lato,Helvetica Neue,Arial,Helvetica,sans-serif ; 
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-`;
-
-export const RootContainer = styled.div`
-  position: relative;
-  height: auto;
-  min-height: 100vh;
+export const ModalWrapper = styled.div`
   width: 100%;
-  overflow: hidden;
-  @media only screen and (max-width : 1200px) {
-    padding: 50px 0;
-  }   
-`
-
-export const RootWrapper = styled.div`
-  background: rgb(24,96,190);
-  background: -moz-linear-gradient(90deg, rgba(24,96,190,0.8) 0%, rgba(37,149,234,0.8) 100%);
-  background: -webkit-linear-gradient(90deg, rgba(24,96,190,0.8) 0%, rgba(37,149,234,0.8) 100%);
-  background: linear-gradient(90deg, rgba(24,96,190,0.8) 0%, rgba(37,149,234,0.8) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1860be",endColorstr="#2595ea",GradientType=1);
-  height: auto;
-  min-height: 100vh;
-  width: 100%;
-  padding: 50px;
+  height: 100vh;
+  background: rgba(51,51,51,0.8);
   z-index: 999;
-  position: relative;
-`
-
-export const RootImageWrapper = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1;
-  @media only screen and (max-width : 1400px) {
-    height: 100%;
-  }
-`
-
-export const RootImage = styled.img`
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  @media only screen and (max-width : 1400px) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;    
-  }
-`
-
-export const FetchingWrapper = styled.div`
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  height: calc(100vh - 136px);
-  margin: 0 ;
-  font-size: 20px;
-  margin: 35px auto;
-  color: #fff;
-  width: calc(100% - 100px);
-  max-width: 1500px; 
 `
 
 export const WeatherWrapper = styled.div`
-  margin: 35px auto;
   color: #fff;
   width: calc(100% - 100px);
+  height: calc(100%- 100px);
+  min-height: 600px;
+  max-height: 600px;
   max-width: 1500px;
-  padding: 0 ;
+  padding: 0;
+  background: #1860BE;
+  padding: 50px;
+  position: relative;
 `
 
 export const WeatherItem = styled.div`
@@ -155,7 +93,6 @@ export const WeatherRow = styled.div`
   @media only screen and (max-width : 1200px) {
     flex-wrap: wrap;
   }
-
 `
 
 export const TopRow = styled.div`
@@ -167,12 +104,11 @@ export const TopRow = styled.div`
   }  
 `
 
-export const TopRowItem = styled.div`
-`
+export const TopRowItem = styled.div``
 
 export const TopRowTemp = styled.h1`
   margin: 0;
-  font-size: 70px;
+  font-size: 55px;
   font-weight: 400;
   display: flex;
   @media only screen and (max-width : 768px) {
@@ -185,7 +121,7 @@ export const TopRowDate = styled.h3``
 
 export const TopRowLocation = styled.h2`
   margin: 0;
-  font-size: 56px;
+  font-size: 40px;
   line-height: 90px;
   font-weight: 400;
   @media only screen and (max-width : 768px) {
@@ -197,38 +133,32 @@ export const TopRowLocation = styled.h2`
   }      
 `
 
-export const ForecastWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 0;
-  @media only screen and (max-width : 1400px) {
-    width: calc(100% - 100px);
-  }
-  @media only screen and (max-width : 992px) {
-    width: calc(100% - 40px);    
-  }
-  @media only screen and (max-width : 768px) {
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;   
-  }            
-`
-
 export const TopRowImage = styled.div`
   width: 80px;
   height: 80px;
   overflow: hidden;
 `
 
-export const WeatherItemImage = styled.img`
-  line-height: 32px;
-  height: 32px;
-  margin-left: 3px;
-  @media only screen and (max-width : 576px) {
-    height: 22px ;
+export const IconImageWrapper = styled.div`
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  @media only screen and (max-width : 768px) {
+    width: 30px;
+    height: 30px;
+  }    
+`
+
+export const IconImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: .1s;
+  &:hover {
+    transform: scale(1.04);
   }
 `

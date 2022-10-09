@@ -22,8 +22,8 @@ export const Button = styled.button`
   color: #fff;
   border-radius: none;
   margin-left: 5px;
-  z-index: 999;
-  background: #2D48A2;
+  z-index: 998;
+  background: #1860BE;
   border: none;
   height: 36px;
   cursor: pointer;
@@ -32,6 +32,6 @@ export const Button = styled.button`
   transition: .2s ease;
   &:hover {
     background: #FFF;
-    color: #2D48A2
+    color: #1860BE
   }
 `

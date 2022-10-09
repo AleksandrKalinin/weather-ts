@@ -3,11 +3,17 @@ import styled from 'styled-components';
 export const ForecastItemWrapper = styled.div`
   width: 285px;
   height: 300px;
-  background: #313A94;
+  background: #1860BE;
   border: 1px solid #fff;
   color: #fff;
   opacity: 0.8;
   padding: 0 10px;
+  cursor: pointer;
+  transition: .2s;
+  &:hover {
+    transform: translate(0, -20px);
+     filter: brightness(1.2);
+  }
   @media only screen and (max-width : 1400px) {
     width: 18%;
     max-width: 18%;

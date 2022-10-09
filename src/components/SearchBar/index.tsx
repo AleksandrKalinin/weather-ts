@@ -5,7 +5,9 @@ import { SearchBarWrapper, SearchInput, Button } from './style';
 
 const SearchBar:React.FC = () => {
   const [search, setSearch] = useState<string>('');
-  const [weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed] = useContext(Context);
+  const { value, value2 } = useContext(Context);
+
+  const [weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed] = value;
   const handleKeyPress = (e: any) => {
     if(e.charCode === 13) {
       fetchInputData();
