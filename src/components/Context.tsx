@@ -34,41 +34,5 @@ type CurrentContextValue = [Weather?, React.Dispatch<React.SetStateAction<Weathe
                             boolean?, React.Dispatch<React.SetStateAction<any>>?,
                             boolean?, React.Dispatch<React.SetStateAction<any>>?,
                             boolean?, React.Dispatch<React.SetStateAction<any>>?];
-const initialWeather = 
-  {
-    base: '',
-    clouds: {},
-    cod: 0,
-    coord: {},
-    dt: 0,
-    id: 0,
-    main: {},
-    name: '',
-    rain: {},
-    sys: {
-      country: '',
-      sunrise: 0,
-      sunset: 0
-    },
-    timezone: 0,
-    visibility: 0,
-    weather: [],
-    wind: { }    
-  }
 
-const initialForecast = {
-  city: {},
-  cnt: 0,
-  code: '',
-  list: [],
-  message: 0  
-}
-
-export const Context = React.createContext<CurrentContextValue>([
-                                                                  initialWeather, () => null, 
-                                                                  initialForecast, () => null,
-                                                                  false, () => null,
-                                                                  true, () => null,
-                                                                  false, () => null,
-                                                                  false, () => null
-                                                                ]);
+export const Context = React.createContext<CurrentContextValue | undefined>(undefined);

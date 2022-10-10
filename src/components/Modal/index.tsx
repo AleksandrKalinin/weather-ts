@@ -17,7 +17,10 @@ import {  ModalWrapper,
 
 import Icon from './assets/close.png';
 
-const Modal:React.FC<Props> = (props) => {
+import { ModalProps } from './types';
+
+const Modal:React.FC<Props> = (props: ModalProps) => {
+  console.log(props);
   const modalData = props.modalData;
   const iconUrl = props.iconUrl;
   const { value2 } = useContext(Context);

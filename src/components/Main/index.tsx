@@ -19,7 +19,7 @@ import { GlobalStyle,
           TopRowLocation, 
           ForecastWrapper, 
           TopRowImage  } from './style';
-import { Weather, Forecast, ForecastData, NewObj } from './types';
+import { Weather, Forecast, ForecastData, NewObj, GeoData, ModalDataType, RequestData } from './types';
 import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle } from '../Icons/Icons';
 import ForecastItem from '../ForecastItem';
 import SearchBar from '../SearchBar';
@@ -42,26 +42,25 @@ const App:React.FC = () => {
   const [isFailed, setFailed] = useState<boolean>(false);
   const [isModalOpen, setModalState] = useState<boolean>(false);
   const [forecastData, setForecastData] = useState<ForecastData[]>();
-  const [modalData, setModalData] = useState<any>({});
-  const [iconUrl, setIconUrl] = useState<any>(tempIconComponent);
+  const [modalData, setModalData] = useState<ModalDataType>({});
+  const [iconUrl, setIconUrl] = useState<React.FC>(tempIconComponent);
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
-  const [currentBg, setCurrentBg] = useState<any>(ClearBG);
+  const [currentBg, setCurrentBg] = useState<string>(ClearBG);
 
   useEffect(() => {
     if(navigator.geolocation) {
       const options = {
         enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 60000
+        timeout: 5000
       };      
-      navigator.geolocation.watchPosition((pos) => {
+      navigator.geolocation.getCurrentPosition<GeoData>((pos) => {
         let lat = pos.coords.latitude;
         let long = pos.coords.longitude;
         const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
         const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`;
         const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`;
-        axios.all([axios.get(url), axios.get(url2)])
+        axios.all([axios.get<RequestData>(url), axios.get<RequestData>(url2)])
           .then(axios.spread((first, second) => { 
             const forecast = first.data;
             const weather = second.data;
@@ -229,7 +228,7 @@ const App:React.FC = () => {
           </RootImageWrapper>
           <RootWrapper>
              {isModalOpen ?
-                <Modal modalData={modalData} weather={weather} iconUrl={iconUrl} timestrSunset={timestrSunset} timestrSunrise={timestrSunrise} />
+                <Modal modalData={modalData} />
               : null}
              <SearchBar />
              {isVisible ?

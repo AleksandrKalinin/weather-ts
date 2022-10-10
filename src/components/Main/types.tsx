@@ -52,3 +52,24 @@ export type NewObj = {
   icon?: string,
   wind?: number
 }
+
+export type GeoType = {
+  coords: {
+    latitude: number | null,
+    longitude: number | null,
+    altitude: number | null,
+    accuracy: number | null,
+    altitudeAccuracy: number | null,
+    speed: number | null
+  },
+  timestamp: number,
+}
+
+export type RequestData = {
+  data: {},
+  status: number,
+  statusText: string,
+  headers: {},
+  config: {},
+  request: {}
+}

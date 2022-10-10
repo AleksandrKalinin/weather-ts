@@ -7,9 +7,11 @@ import { ForecastItemWrapper,
         Subtitle, 
         Text } from './style';
 import { Props } from './types';
+import type { SingleItemType } from '../../types/index';
 import { Context } from '../Context';
 
-const ForecastItem:React.FC<Props> = (props) => {
+const ForecastItem = (props: number) => {
+  console.log(SingleItemType);
   let icon = props.item.icon();
   const { value2, value3 } = useContext(Context);
   const [isModalOpen, setModalState] = value2;
