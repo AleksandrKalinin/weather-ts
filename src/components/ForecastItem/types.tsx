@@ -1,3 +1,26 @@
+export type SingleItemType = {
+  item: {
+    city: string,
+    country: string,
+    currentDescription: string,
+    currentName: string,
+    day: number,
+    feelsLike: number,
+    formattedDate: {},
+    formattedTime: string,
+    humidity: number,
+    icon: any,
+    max: number,
+    min: number,
+    pressure: number,
+    sunrise: number,
+    sunset: number,
+    temp: number,
+    weekday: number,
+    wind: number
+  }
+}
+
 export type Props = {
   item: {
     formattedTime?: string,
@@ -8,7 +31,7 @@ export type Props = {
     min?: number,
     currentName?: string,
     currentDescription?: string,
-    icon?: string,
+    icon: string,
     wind?: number    
   }
 }

@@ -20,5 +20,4 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/components", "public/icons/*/**", "src/types", "src"]
-}
+  "include": ["src", "src/components", "src/types"]}

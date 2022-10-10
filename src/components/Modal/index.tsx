@@ -17,12 +17,16 @@ import {  ModalWrapper,
 
 import Icon from './assets/close.png';
 
-import { ModalProps } from './types';
+import { ModalDataType } from './types';
 
-const Modal:React.FC<Props> = (props: ModalProps) => {
-  console.log(props);
+type PropsType = {
+  modalData: ModalDataType
+}
+
+const Modal = (props: PropsType) => {
   const modalData = props.modalData;
-  const iconUrl = props.iconUrl;
+  console.log("modalData", props);
+  const iconUrl = modalData.icon();
   const { value2 } = useContext(Context);
   const [isModalOpen, setModalState] = value2;
   const closeModal = () => {

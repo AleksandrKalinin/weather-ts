@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ForecastItemWrapper, 
         Header, 
         Title, 
@@ -6,34 +6,32 @@ import { ForecastItemWrapper,
         Description, 
         Subtitle, 
         Text } from './style';
-import { Props } from './types';
-import type { SingleItemType } from '../../types/index';
+import { Props, SingleItemType } from './types';
 import { Context } from '../Context';
 
-const ForecastItem = (props: number) => {
-  console.log(SingleItemType);
-  let icon = props.item.icon();
-  const { value2, value3 } = useContext(Context);
+const ForecastItem = ( { item } : SingleItemType ) => {
+  const {value1, value2, value3} = useContext(Context);
+  let icon = item.icon();
   const [isModalOpen, setModalState] = value2;
   const [modalData, setModalData] = value3;
   
   const openModal = () => {
     setModalState(true);
-    setModalData(props.item);
+    setModalData(item);
   }
 
   return (
     <ForecastItemWrapper onClick={() => openModal()}>
       <Header>
-        <Title>{props.item.weekday}, {props.item.day} </Title>                
+        <Title>{item.weekday}, {item.day} </Title>                
       </Header>
       <IconWrapper>
         {icon}
       </IconWrapper>
       <Description>
-          <Subtitle>{Math.round(Number(props.item.max))}°C / {Math.round(Number(props.item.min))}°C</Subtitle>
-          <Text>{props.item.currentName} ({props.item.currentDescription})</Text>
-          <Text>Wind speed: {props.item.wind} m/s</Text>
+          <Subtitle>{Math.round(Number(item.max))}°C / {Math.round(Number(item.min))}°C</Subtitle>
+          <Text>{item.currentName} ({item.currentDescription})</Text>
+          <Text>Wind speed: {item.wind} m/s</Text>
       </Description>
     </ForecastItemWrapper>
   );

@@ -20,7 +20,16 @@ export type Weather = {
 }
 
 export type Forecast = {
-  city: object,
+  city: {
+    coord: {},
+    country: string,
+    id: number,
+    name: "Gomel",
+    population: number,
+    sunrise: number,
+    sunset: number,
+    timezone: number
+  },
   cnt: number,
   code: string,
   list: { [key:string]: any }[],
@@ -72,4 +81,25 @@ export type RequestData = {
   headers: {},
   config: {},
   request: {}
+}
+
+export type ModalDataType = {
+  city?: string,
+  country?: string,
+  currentDescription?: string,
+  currentName?: string,
+  day?: number,
+  feelsLike?: number,
+  formattedDate?: {},
+  formattedTime?: string,
+  humidity?: number,
+  icon?: any,
+  max?: number,
+  min?: number,
+  pressure?: number,
+  sunrise?: number,
+  sunset?: number,
+  temp?: number,
+  weekday?: number,
+  wind?: number
 }

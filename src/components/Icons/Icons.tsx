@@ -165,11 +165,11 @@ export const Snow = () => {
           <stop offset="0.45" stopColor="#86c3db"/>
           <stop offset="1" stopColor="#5eafcf"/>
         </linearGradient>
-        <linearGradient id="c" x1="29.67" y1="42.69" x2="32.33" y2="47.31" xlinkXref="#b"/>
-        <linearGradient id="d" x1="23.12" y1="43.48" x2="24.88" y2="46.52" xlinkXref="#b"/>
-        <linearGradient id="e" x1="22.67" y1="42.69" x2="25.33" y2="47.31" xlinkXref="#b"/>
-        <linearGradient id="f" x1="37.12" y1="43.48" x2="38.88" y2="46.52" xlinkXref="#b"/>
-        <linearGradient id="g" x1="36.67" y1="42.69" x2="39.33" y2="47.31" xlinkXref="#b"/>
+        <linearGradient id="c" x1="29.67" y1="42.69" x2="32.33" y2="47.31" xlinkHref="#b"/>
+        <linearGradient id="d" x1="23.12" y1="43.48" x2="24.88" y2="46.52" xlinkHref="#b"/>
+        <linearGradient id="e" x1="22.67" y1="42.69" x2="25.33" y2="47.31" xlinkHref="#b"/>
+        <linearGradient id="f" x1="37.12" y1="43.48" x2="38.88" y2="46.52" xlinkHref="#b"/>
+        <linearGradient id="g" x1="36.67" y1="42.69" x2="39.33" y2="47.31" xlinkHref="#b"/>
       </defs>
       <path d="M46.5,31.5l-.32,0a10.49,10.49,0,0,0-19.11-8,7,7,0,0,0-10.57,6,7.21,7.21,0,0,0,.1,1.14A7.5,7.5,0,0,0,18,45.5a4.19,4.19,0,0,0,.5,0v0h28a7,7,0,0,0,0-14Z" stroke="#e6effc" strokeMiterlimit="10" strokeWidth="0.5" fill="url(#a)"/>
       <g>

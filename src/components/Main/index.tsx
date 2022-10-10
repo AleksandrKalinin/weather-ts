@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState, useEffect, Fragment, useCallback } from 'react';
 import axios from 'axios';
 import { Context } from '../Context';
@@ -19,7 +20,7 @@ import { GlobalStyle,
           TopRowLocation, 
           ForecastWrapper, 
           TopRowImage  } from './style';
-import { Weather, Forecast, ForecastData, NewObj, GeoData, ModalDataType, RequestData } from './types';
+import { Weather, Forecast, ForecastData, NewObj, GeoType, ModalDataType, RequestData } from './types';
 import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle } from '../Icons/Icons';
 import ForecastItem from '../ForecastItem';
 import SearchBar from '../SearchBar';
@@ -30,6 +31,8 @@ import ClearBG from './assets/clear.jpg';
 import RainBG from './assets/rain.jpg';
 import SnowBG from './assets/snow.jpg';
 import HailBG from './assets/hail.jpg';
+import ThunderBG from './assets/thunder.jpg';
+
 
 const App:React.FC = () => {
   let tempIconComponent = () => {
@@ -42,7 +45,7 @@ const App:React.FC = () => {
   const [isFailed, setFailed] = useState<boolean>(false);
   const [isModalOpen, setModalState] = useState<boolean>(false);
   const [forecastData, setForecastData] = useState<ForecastData[]>();
-  const [modalData, setModalData] = useState<ModalDataType>({});
+  const [modalData, setModalData] = useState<ModalDataType | undefined>();
   const [iconUrl, setIconUrl] = useState<React.FC>(tempIconComponent);
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
@@ -54,16 +57,17 @@ const App:React.FC = () => {
         enableHighAccuracy: true,
         timeout: 5000
       };      
-      navigator.geolocation.getCurrentPosition<GeoData>((pos) => {
+      navigator.geolocation.getCurrentPosition((pos: GeoType) => {
         let lat = pos.coords.latitude;
         let long = pos.coords.longitude;
         const API_KEY = 'a5821f4600801be4a4ebefc0a0a643ba';
         const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`;
         const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`;
-        axios.all([axios.get<RequestData>(url), axios.get<RequestData>(url2)])
+        axios.all([axios.get(url), axios.get(url2)])
           .then(axios.spread((first, second) => { 
             const forecast = first.data;
             const weather = second.data;
+            console.log(forecast);
             setForecast(forecast);
             setWeather(weather);
            }))
@@ -82,7 +86,7 @@ const App:React.FC = () => {
   const fetchData = useCallback(() => {
       setFailed(false);
       if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
-        let iconUrl = "https://openweathermap.org/img/w/" + weather?.weather[0]?.icon + ".png";      
+        let iconUrl : any | null = null;      
         let sunrise = weather?.sys?.sunrise;
         let sunset = weather?.sys?.sunset;
         let dateSunrise = new Date(sunrise! * 1000);
@@ -91,8 +95,8 @@ const App:React.FC = () => {
         let timestrSunset = dateSunset.toLocaleTimeString();
         let currentForecast = forecast!.list.slice();
         let newForecast = [];
-        let newObj:NewObj = {};
-        currentForecast.map((item,index) =>{
+        let newObj: any = {};
+        currentForecast.map((item,index) => {
           let date = new Date(item.dt * 1000);
           let hours = date.getHours();
           let minutes = "0" + date.getMinutes();
@@ -161,6 +165,7 @@ const App:React.FC = () => {
         let condition = weather?.weather[0]?.main;
         if(condition === 'Rain') {
           iconUrl = Rain;
+          console.log("iconUrl", iconUrl);
           setCurrentBg(RainBG);
         } else if(condition === 'Drizzle') {            
           iconUrl = Drizzle;
@@ -203,6 +208,7 @@ const App:React.FC = () => {
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
         setIconUrl(iconUrl);
+        console.log(typeof iconUrl);
         
       } 
     }, [weather, forecast])
@@ -216,7 +222,11 @@ const App:React.FC = () => {
   },[forecast, weather, fetchData])
 
   return (
-    <Context.Provider value = {{ value: [weather, setWeather, forecast, setForecast, isVisible, setVisible, isFetching, setFetching, isFailed, setFailed ], 
+    <Context.Provider value = {{ value1: [weather, setWeather, 
+                                         forecast, setForecast, 
+                                         isVisible, setVisible, 
+                                         isFetching, setFetching, 
+                                         isFailed, setFailed ], 
                                  value2: [isModalOpen, setModalState],
                                  value3: [modalData, setModalData]
                               }}>
