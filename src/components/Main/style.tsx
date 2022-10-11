@@ -129,6 +129,9 @@ export const WeatherItemHeader = styled.h4`
 export const WeatherItemText = styled.p`
   font-size: 16px;
   margin: 8px 0;
+  display: flex;
+  align-items: center;
+  height: 50px;
   @media only screen and (max-width : 1200px) {
     width: 100%;
   }
@@ -231,4 +234,10 @@ export const WeatherItemImage = styled.img`
   @media only screen and (max-width : 576px) {
     height: 22px ;
   }
+`
+
+export const WeatherItemIcon = styled.div`
+  margin-top: -5px;
+  height: 40px;
+  width: 40px;
 `

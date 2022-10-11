@@ -11,7 +11,8 @@ import { GlobalStyle,
           WeatherWrapper, 
           WeatherItem, 
           WeatherItemHeader, 
-          WeatherItemText, 
+          WeatherItemText,
+          WeatherItemIcon, 
           WeatherRow, 
           TopRow, 
           TopRowItem, 
@@ -21,7 +22,7 @@ import { GlobalStyle,
           ForecastWrapper, 
           TopRowImage  } from './style';
 import { Weather, Forecast, ForecastData, NewObj, GeoType, ModalDataType, RequestData } from './types';
-import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle } from '../Icons/Icons';
+import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle, Humidity, Pressure, Wind, Sunrise, Sunset, Temperature } from '../Icons/Icons';
 import ForecastItem from '../ForecastItem';
 import SearchBar from '../SearchBar';
 import Modal from '../Modal';
@@ -205,8 +206,8 @@ const App:React.FC = () => {
           iconUrl = Clear;
           setCurrentBg(ClearBG);
         }
+        console.log(iconUrl);
         setForecastData(newForecast);
-        console.log(newForecast);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
         setIconUrl(iconUrl);
@@ -248,7 +249,7 @@ const App:React.FC = () => {
                     <TopRowItem>
                       <TopRowTemp>{Math.round(Number(weather?.main?.temp))}°
                         <TopRowImage>
-                          iconUrl
+                          {iconUrl}
                         </TopRowImage>
                        </TopRowTemp>
                       <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>
@@ -260,37 +261,37 @@ const App:React.FC = () => {
                   <WeatherRow>
                     <WeatherItem>
                       <WeatherItemHeader>{Math.round(Number(weather?.main?.temp_min))}°C / {Math.round(Number(weather?.main?.temp_max))}°C </WeatherItemHeader>
-                      <WeatherItemText>High / Low</WeatherItemText>
+                      <WeatherItemText>High / Low <WeatherItemIcon>{Temperature()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>
                     <WeatherItem>
                       <WeatherItemHeader>{Math.round(Number(weather?.main?.feels_like))}°C </WeatherItemHeader>
-                      <WeatherItemText>Feels like</WeatherItemText>
+                      <WeatherItemText>Feels like <WeatherItemIcon>{Temperature()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>
                     <WeatherItem>
                       <WeatherItemHeader>{timestrSunrise}</WeatherItemHeader>
-                      <WeatherItemText>Sunrise</WeatherItemText>
+                      <WeatherItemText>Sunrise <WeatherItemIcon>{Sunrise()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>
                     <WeatherItem>
                       <WeatherItemHeader>{timestrSunset}</WeatherItemHeader>
-                      <WeatherItemText>Sunset</WeatherItemText>
+                      <WeatherItemText>Sunset <WeatherItemIcon>{Sunset()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>              
                   </WeatherRow>
                   <WeatherRow>
                     <WeatherItem>
                       <WeatherItemHeader>{weather?.weather[0]?.main}</WeatherItemHeader>
-                      <WeatherItemText>Current condition</WeatherItemText>
+                      <WeatherItemText> Current condition <WeatherItemIcon>{Clouds()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>            
                     <WeatherItem>
                       <WeatherItemHeader>{weather?.main?.pressure} hpa</WeatherItemHeader>
-                      <WeatherItemText>Pressure</WeatherItemText>
+                      <WeatherItemText>Pressure <WeatherItemIcon>{Pressure()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>
                     <WeatherItem>
                       <WeatherItemHeader>{weather?.main?.humidity}</WeatherItemHeader>
-                      <WeatherItemText>Humidity</WeatherItemText>
+                      <WeatherItemText>Humidity <WeatherItemIcon>{Humidity()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>
                     <WeatherItem>
                       <WeatherItemHeader>{weather?.wind?.speed} m/s</WeatherItemHeader>
-                      <WeatherItemText>Wind</WeatherItemText>
+                      <WeatherItemText>Wind <WeatherItemIcon>{Wind()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>
                   </WeatherRow>
                 </WeatherWrapper>
