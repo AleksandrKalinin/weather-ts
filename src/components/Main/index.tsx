@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import React, { useState, useEffect, Fragment, useCallback } from 'react';
 import axios from 'axios';
 import { Context } from '../Context';
@@ -37,15 +37,17 @@ import ThunderBG from './assets/thunder.jpg';
 const App:React.FC = () => {
   let tempIconComponent = () => {
     return(<p>Empty</p>);
-  };  
+  }; 
+
+
   const [forecast, setForecast] = useState<Forecast>();
   const [weather, setWeather] = useState<Weather>();
   const [isFetching, setFetching] = useState<boolean>(true);
   const [isVisible, setVisible] = useState<boolean>(false);
   const [isFailed, setFailed] = useState<boolean>(false);
   const [isModalOpen, setModalState] = useState<boolean>(false);
-  const [forecastData, setForecastData] = useState<ForecastData[]>();
-  const [modalData, setModalData] = useState<ModalDataType | undefined>();
+  const [forecastData, setForecastData] = useState<ModalDataType[]>();
+  const [modalData, setModalData] = useState<ModalDataType | null>(null);
   const [iconUrl, setIconUrl] = useState<React.FC>(tempIconComponent);
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
@@ -67,7 +69,6 @@ const App:React.FC = () => {
           .then(axios.spread((first, second) => { 
             const forecast = first.data;
             const weather = second.data;
-            console.log(forecast);
             setForecast(forecast);
             setWeather(weather);
            }))
@@ -205,11 +206,10 @@ const App:React.FC = () => {
           setCurrentBg(ClearBG);
         }
         setForecastData(newForecast);
+        console.log(newForecast);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
         setIconUrl(iconUrl);
-        console.log(typeof iconUrl);
-        
       } 
     }, [weather, forecast])
 
@@ -248,7 +248,7 @@ const App:React.FC = () => {
                     <TopRowItem>
                       <TopRowTemp>{Math.round(Number(weather?.main?.temp))}°
                         <TopRowImage>
-                          {iconUrl}
+                          iconUrl
                         </TopRowImage>
                        </TopRowTemp>
                       <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>

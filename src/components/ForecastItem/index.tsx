@@ -10,11 +10,13 @@ import { Props, SingleItemType } from './types';
 import { Context } from '../Context';
 
 const ForecastItem = ( { item } : SingleItemType ) => {
+  let icon : any;
   const {value1, value2, value3} = useContext(Context);
-  let icon = item.icon();
   const [isModalOpen, setModalState] = value2;
   const [modalData, setModalData] = value3;
-  
+  if(typeof item.icon !== 'undefined') {
+    icon = item.icon();
+  }
   const openModal = () => {
     setModalState(true);
     setModalData(item);

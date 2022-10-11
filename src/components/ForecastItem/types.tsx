@@ -1,23 +1,23 @@
 export type SingleItemType = {
   item: {
-    city: string,
-    country: string,
-    currentDescription: string,
-    currentName: string,
-    day: number,
-    feelsLike: number,
-    formattedDate: {},
-    formattedTime: string,
-    humidity: number,
-    icon: any,
-    max: number,
-    min: number,
-    pressure: number,
-    sunrise: number,
-    sunset: number,
-    temp: number,
-    weekday: number,
-    wind: number
+    city?: string,
+    country?: string,
+    currentDescription?: string,
+    currentName?: string,
+    day?: number,
+    feelsLike?: number,
+    formattedDate?: Date | string,
+    formattedTime?: string,
+    humidity?: number,
+    icon(): Document,
+    max?: number,
+    min?: number,
+    pressure?: number,
+    sunrise?: number,
+    sunset?: number,
+    temp?: number,
+    weekday?: number,
+    wind?: number
   }
 }
 

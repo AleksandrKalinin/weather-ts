@@ -8,7 +8,7 @@ export type ModalDataType = {
   formattedDate: Date,
   formattedTime?: string,
   humidity?: number,
-  icon: any,
+  icon(): Document,
   max?: number,
   min?: number,
   pressure?: number,
