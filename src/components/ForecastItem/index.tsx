@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ForecastItemWrapper, 
         Header, 
         Title, 
@@ -8,28 +8,26 @@ import { ForecastItemWrapper,
         Text } from './style';
 import { Props, SingleItemType } from './types';
 import { Context } from '../Context';
+import { DefaultIcon } from '../Icons/Icons';
 
 const ForecastItem = ( { item } : SingleItemType ) => {
-  const tempIconComponent = () => {
-    return (
-      <p>fff
-      </p>
-    );
-  }; 
 
-  let IconUrl: React.Component<any, any> | null = null;
+  const [IconUrl, setIcon] = useState<React.ReactNode>(DefaultIcon);
   const {value1, value2, value3} = useContext(Context);
   const [isModalOpen, setModalState] = value2;
   const [modalData, setModalData] = value3;
-  if(typeof item.icon !== 'undefined') {
-    IconUrl = item.icon;
-  }
+
+  useEffect(() => {
+    if(typeof item.icon !== 'undefined') {
+      setIcon(item.icon);
+    }
+  },[])
+
   const openModal = () => {
+    document.body.style.overflow = 'hidden';  
     setModalState(true);
     setModalData(item);
   }
-
-  console.log(IconUrl);
 
   return (
     <ForecastItemWrapper onClick={() => openModal()}>
@@ -37,7 +35,7 @@ const ForecastItem = ( { item } : SingleItemType ) => {
         <Title>{item.weekday}, {item.day} </Title>                
       </Header>
       <IconWrapper>
-        IconUrl
+        {IconUrl}
       </IconWrapper>
       <Description>
           <Subtitle>{Math.round(Number(item.max))}°C / {Math.round(Number(item.min))}°C</Subtitle>

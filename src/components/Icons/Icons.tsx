@@ -539,3 +539,8 @@ export const Celcius = () => {
   )
 }
 
+export const DefaultIcon = () => {
+  return(
+    <span>Icon</span>
+  )
+}

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../Context';
 import {  ModalWrapper,
           WeatherWrapper, 
@@ -18,23 +18,28 @@ import {  ModalWrapper,
 import Icon from './assets/close.png';
 
 import { ModalDataType } from './types';
+import { DefaultIcon } from '../Icons/Icons';
 
 type PropsType = {
   modalData: ModalDataType | null
 }
 
 const Modal = (props: PropsType) => {
-  let modalData : ModalDataType | null, iconUrl : any;
+  const [modalData, setModalData] = useState<ModalDataType | null>(props.modalData);
+  const [IconUrl, setIcon] = useState<React.ReactNode>(DefaultIcon)
   const { value2 } = useContext(Context);
   const [isModalOpen, setModalState] = value2;
+
   const closeModal = () => {
     document.body.style.overflow = 'unset';    
     setModalState(false);
   }   
-  if(props !== null && props.modalData ) {
-    modalData = props.modalData;
-    iconUrl = modalData.icon;
-  }
+
+  useEffect(() => {
+    if(props !== null && props.modalData ) {
+      setIcon(modalData!.icon);
+    }
+  },[props.modalData]);
 
   return (
     <ModalWrapper>
@@ -46,7 +51,7 @@ const Modal = (props: PropsType) => {
           <TopRowItem>
             <TopRowTemp>{Math.round(Number(modalData!.temp))}°
               <TopRowImage>
-                {iconUrl()}
+                {IconUrl}
               </TopRowImage>
              </TopRowTemp>
             <TopRowDate>{modalData!.weekday} : {modalData!.formattedDate!.toLocaleDateString()}</TopRowDate>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ModalWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background: rgba(51,51,51,0.8);
   z-index: 999;
   position: absolute;

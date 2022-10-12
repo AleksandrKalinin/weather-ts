@@ -236,7 +236,7 @@ export const WeatherItemImage = styled.img`
   }
 `
 
-export const WeatherItemIcon = styled.div`
+export const WeatherItemIcon = styled.span`
   margin-top: -5px;
   height: 40px;
   width: 40px;

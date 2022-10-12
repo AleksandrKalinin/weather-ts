@@ -50,10 +50,11 @@ const App:React.FC = () => {
   const [isModalOpen, setModalState] = useState<boolean>(false);
   const [forecastData, setForecastData] = useState<ModalDataType[]>();
   const [modalData, setModalData] = useState<ModalDataType | null>(null);
-  const [iconUrl, setIconUrl] = useState<React.Component<any, any>>();
+  const [iconUrl, setIconUrl] = useState<React.ReactNode>();
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
   const [currentBg, setCurrentBg] = useState<string>(ClearBG);
+  const [Param, setParam] = useState<React.ReactNode>();
 
   useEffect(() => {
     if(navigator.geolocation) {
@@ -206,6 +207,8 @@ const App:React.FC = () => {
           iconUrl = Clear;
           setCurrentBg(ClearBG);
         }
+        let Param = iconUrl;
+        setParam(Param);
         setForecastData(newForecast);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
@@ -248,7 +251,7 @@ const App:React.FC = () => {
                     <TopRowItem>
                       <TopRowTemp>{Math.round(Number(weather?.main?.temp))}°
                         <TopRowImage>
-                          {iconUrl}
+                          {Param}
                         </TopRowImage>
                        </TopRowTemp>
                       <TopRowDate>Today: {new Date().toLocaleDateString()}</TopRowDate>

@@ -8,7 +8,7 @@ export type ModalDataType = {
   formattedDate: Date,
   formattedTime?: string,
   humidity?: number,
-  icon: React.Component<any, any>,
+  icon: React.ReactNode,
   max?: number,
   min?: number,
   pressure?: number,
