@@ -24,7 +24,6 @@ type PropsType = {
 }
 
 const Modal = (props: PropsType) => {
-  console.log(props);
   let modalData : ModalDataType | null, iconUrl : any;
   const { value2 } = useContext(Context);
   const [isModalOpen, setModalState] = value2;
@@ -32,10 +31,9 @@ const Modal = (props: PropsType) => {
     document.body.style.overflow = 'unset';    
     setModalState(false);
   }   
-  if(props) {
+  if(props !== null && props.modalData ) {
     modalData = props.modalData;
-    iconUrl = modalData!.icon();
-    console.log(iconUrl);
+    iconUrl = modalData.icon;
   }
 
   return (
@@ -48,7 +46,7 @@ const Modal = (props: PropsType) => {
           <TopRowItem>
             <TopRowTemp>{Math.round(Number(modalData!.temp))}°
               <TopRowImage>
-                {iconUrl}
+                {iconUrl()}
               </TopRowImage>
              </TopRowTemp>
             <TopRowDate>{modalData!.weekday} : {modalData!.formattedDate!.toLocaleDateString()}</TopRowDate>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, Fragment, useCallback } from 'react';
 import axios from 'axios';
 import { Context } from '../Context';
@@ -36,10 +35,12 @@ import ThunderBG from './assets/thunder.jpg';
 
 
 const App:React.FC = () => {
-  let tempIconComponent = () => {
-    return(<p>Empty</p>);
+  const tempIconComponent = () => {
+    return (
+      <svg>
+      </svg>
+    );
   }; 
-
 
   const [forecast, setForecast] = useState<Forecast>();
   const [weather, setWeather] = useState<Weather>();
@@ -49,7 +50,7 @@ const App:React.FC = () => {
   const [isModalOpen, setModalState] = useState<boolean>(false);
   const [forecastData, setForecastData] = useState<ModalDataType[]>();
   const [modalData, setModalData] = useState<ModalDataType | null>(null);
-  const [iconUrl, setIconUrl] = useState<React.FC>(tempIconComponent);
+  const [iconUrl, setIconUrl] = useState<React.Component<any, any>>();
   const [timestrSunrise, setSunrise] = useState<string>();
   const [timestrSunset, setSunset] = useState<string>();
   const [currentBg, setCurrentBg] = useState<string>(ClearBG);
@@ -167,7 +168,6 @@ const App:React.FC = () => {
         let condition = weather?.weather[0]?.main;
         if(condition === 'Rain') {
           iconUrl = Rain;
-          console.log("iconUrl", iconUrl);
           setCurrentBg(RainBG);
         } else if(condition === 'Drizzle') {            
           iconUrl = Drizzle;
@@ -206,7 +206,6 @@ const App:React.FC = () => {
           iconUrl = Clear;
           setCurrentBg(ClearBG);
         }
-        console.log(iconUrl);
         setForecastData(newForecast);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
