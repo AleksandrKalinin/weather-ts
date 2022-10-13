@@ -103,3 +103,8 @@ export type ModalDataType = {
   weekday?: number,
   wind?: number
 }
+
+export type ChartDataType = {
+  time?: string,
+  temperature?: number
+}

@@ -1,6 +1,4 @@
 export type ChartDataType = {
-	data: {
-		time: string,
-		temperature: number
-	}[]
+	time: string,
+	temperature: number
 }

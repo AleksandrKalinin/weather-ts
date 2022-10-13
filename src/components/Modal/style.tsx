@@ -16,9 +16,9 @@ export const ModalWrapper = styled.div`
 export const WeatherWrapper = styled.div`
   color: #fff;
   width: calc(100% - 100px);
-  height: calc(100%- 100px);
+  height: auto;
   min-height: 600px;
-  max-height: 600px;
+  max-height: auto;
   max-width: 1000px;
   padding: 0;
   background: #1860BE;

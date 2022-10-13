@@ -28,6 +28,11 @@ type Forecast = {
   message: number 
 }
 
+type ChartDataType = {
+  time: string,
+  temperature: number
+}
+
 type value1Type = [
     Weather?, React.Dispatch<React.SetStateAction<Weather | undefined>>?, 
     Forecast?, React.Dispatch<React.SetStateAction<Forecast | undefined>>?,
@@ -39,11 +44,14 @@ type value2Type = [boolean?, React.Dispatch<React.SetStateAction<any>>?]
 
 type value3Type = [boolean?, React.Dispatch<React.SetStateAction<any>>?]
 
+type value4Type = [ChartDataType?, React.Dispatch<React.SetStateAction<any>>?]
+
 type CurrentContextValue = {
   value: {
     value1: value1Type, 
     value2: value2Type, 
-    value3: value3Type    
+    value3: value3Type,
+    value4: value4Type    
   }
 }
 

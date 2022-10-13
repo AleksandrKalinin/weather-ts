@@ -17,6 +17,7 @@ import {  ModalWrapper,
 
 import Icon from './assets/close.png';
 import { ModalDataType } from './types';
+import { ChartHeightType } from '../../types';
 import { DefaultIcon } from '../Icons/Icons';
 import WeatherChart from '../WeatherChart';
 
@@ -24,7 +25,7 @@ type PropsType = {
   modalData: ModalDataType | null
 }
 
-const Modal = (props: PropsType) => {
+const Modal = (props: PropsType, { height }: ChartHeightType) => {
   const [modalData, setModalData] = useState<ModalDataType | null>(props.modalData);
   const [IconUrl, setIcon] = useState<React.ReactNode>(DefaultIcon)
   const { value2 } = useContext(Context);
@@ -88,7 +89,7 @@ const Modal = (props: PropsType) => {
             <WeatherItemText>Wind</WeatherItemText>
           </WeatherItem>
         </WeatherRow>
-        <WeatherChart data={chartData} />
+        <WeatherChart height={220}/>
       </WeatherWrapper>      
     </ModalWrapper>
   );

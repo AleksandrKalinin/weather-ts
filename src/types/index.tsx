@@ -41,3 +41,7 @@ export type ModalDataType = {
   weekday?: number,
   wind?: number
 }
+
+export type ChartHeightType = {
+  height: number
+}

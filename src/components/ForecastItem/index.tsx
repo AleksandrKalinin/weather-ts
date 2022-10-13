@@ -10,12 +10,24 @@ import { SingleItemType } from './types';
 import { Context } from '../Context';
 import { DefaultIcon } from '../Icons/Icons';
 
-const ForecastItem = ( { item } : SingleItemType ) => {
+type IndexType = {
+  id: number
+}
 
+type ForecastProps = {
+  item: SingleItemType,
+  id: number;
+}
+
+const ForecastItem = ( { item, id }: ForecastProps ) => {
+  console.log(id);
+  console.log(item);
+  //console.log(id);
   const [IconUrl, setIcon] = useState<React.ReactNode>(DefaultIcon);
-  const {value2, value3} = useContext(Context);
+  const {value2, value3, value4} = useContext(Context);
   const [isModalOpen, setModalState] = value2;
   const [modalData, setModalData] = value3;
+  const [chartData, setChartData] = value4;
 
   useEffect(() => {
     if(typeof item.icon !== 'undefined') {
@@ -23,14 +35,14 @@ const ForecastItem = ( { item } : SingleItemType ) => {
     }
   },[])
 
-  const openModal = () => {
-    document.body.style.overflow = 'hidden';  
+  const openModal = (index: any) => {
+    //document.body.style.overflow = 'hidden';  
     setModalState(true);
     setModalData(item);
   }
 
   return (
-    <ForecastItemWrapper onClick={() => openModal()}>
+    <ForecastItemWrapper onClick={(index) => openModal(index)}>
       <Header>
         <Title>{item.weekday}, {item.day} </Title>                
       </Header>
