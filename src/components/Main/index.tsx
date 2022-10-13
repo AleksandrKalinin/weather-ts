@@ -20,10 +20,11 @@ import { GlobalStyle,
           TopRowLocation, 
           ForecastWrapper, 
           TopRowImage  } from './style';
-import { Weather, Forecast, ForecastData, NewObj, GeoType, ModalDataType, RequestData } from './types';
+import { Weather, Forecast, GeoType, ModalDataType } from './types';
 import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle, Humidity, Pressure, Wind, Sunrise, Sunset, Temperature } from '../Icons/Icons';
 import ForecastItem from '../ForecastItem';
 import SearchBar from '../SearchBar';
+import WeatherChart from '../WeatherChart';
 import Modal from '../Modal';
 import FogBG from './assets/fog.jpg';
 import CloudsBG from './assets/clouds.jpg';
@@ -33,14 +34,7 @@ import SnowBG from './assets/snow.jpg';
 import HailBG from './assets/hail.jpg';
 import ThunderBG from './assets/thunder.jpg';
 
-
 const App:React.FC = () => {
-  const tempIconComponent = () => {
-    return (
-      <svg>
-      </svg>
-    );
-  }; 
 
   const [forecast, setForecast] = useState<Forecast>();
   const [weather, setWeather] = useState<Weather>();
@@ -55,6 +49,7 @@ const App:React.FC = () => {
   const [timestrSunset, setSunset] = useState<string>();
   const [currentBg, setCurrentBg] = useState<string>(ClearBG);
   const [Param, setParam] = useState<React.ReactNode>();
+  const [chartData, setChartData] = useState<any>();
 
   useEffect(() => {
     if(navigator.geolocation) {
@@ -99,6 +94,7 @@ const App:React.FC = () => {
         let timestrSunset = dateSunset.toLocaleTimeString();
         let currentForecast = forecast!.list.slice();
         let newForecast = [];
+        let chartData = [];
         let newObj: any = {};
         currentForecast.map((item,index) => {
           let date = new Date(item.dt * 1000);
@@ -113,7 +109,13 @@ const App:React.FC = () => {
           item.weekday = weekday;
           item.day = day;
           item.formattedDate = date;
-        }) 
+        })
+        for (let i = 0; i < 8; i++) {
+          let chartObj: any = {};
+          chartObj["time"] = currentForecast[i].dt;
+          chartObj["temperature"] = currentForecast[i].main.temp;
+          chartData.push(chartObj);
+        }
         for (let i = 0; i < currentForecast.length; i+=8) {
           let iconCode = currentForecast[i].weather[0].icon;
           let forecastCondition = currentForecast[i].weather[0].main;
@@ -210,6 +212,7 @@ const App:React.FC = () => {
         let Param = iconUrl;
         setParam(Param);
         setForecastData(newForecast);
+        setChartData(chartData);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
         setIconUrl(iconUrl);
@@ -297,6 +300,7 @@ const App:React.FC = () => {
                     </WeatherItem>
                   </WeatherRow>
                 </WeatherWrapper>
+                <WeatherChart data={chartData} />
                 <ForecastWrapper>
                   {forecastData?.map((item,index) => 
                     <ForecastItem key = {index} item = {item} />

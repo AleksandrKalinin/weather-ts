@@ -6,14 +6,14 @@ import { ForecastItemWrapper,
         Description, 
         Subtitle, 
         Text } from './style';
-import { Props, SingleItemType } from './types';
+import { SingleItemType } from './types';
 import { Context } from '../Context';
 import { DefaultIcon } from '../Icons/Icons';
 
 const ForecastItem = ( { item } : SingleItemType ) => {
 
   const [IconUrl, setIcon] = useState<React.ReactNode>(DefaultIcon);
-  const {value1, value2, value3} = useContext(Context);
+  const {value2, value3} = useContext(Context);
   const [isModalOpen, setModalState] = value2;
   const [modalData, setModalData] = value3;
 

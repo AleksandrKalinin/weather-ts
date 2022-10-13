@@ -16,9 +16,9 @@ import {  ModalWrapper,
           IconImage } from './style';
 
 import Icon from './assets/close.png';
-
 import { ModalDataType } from './types';
 import { DefaultIcon } from '../Icons/Icons';
+import WeatherChart from '../WeatherChart';
 
 type PropsType = {
   modalData: ModalDataType | null
@@ -88,6 +88,7 @@ const Modal = (props: PropsType) => {
             <WeatherItemText>Wind</WeatherItemText>
           </WeatherItem>
         </WeatherRow>
+        <WeatherChart data={chartData} />
       </WeatherWrapper>      
     </ModalWrapper>
   );
