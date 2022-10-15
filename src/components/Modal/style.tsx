@@ -67,6 +67,9 @@ export const WeatherItemHeader = styled.h4`
 export const WeatherItemText = styled.p`
   font-size: 16px;
   margin: 8px 0;
+  display: flex;
+  align-items: center;
+  height: 50px;  
   @media only screen and (max-width : 1200px) {
     width: 100%;
   }
@@ -161,4 +164,10 @@ export const IconImage = styled.img`
   &:hover {
     transform: scale(1.04);
   }
+`
+
+export const WeatherItemIcon = styled.span`
+  margin-top: -5px;
+  height: 40px;
+  width: 40px;
 `

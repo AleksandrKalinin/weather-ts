@@ -40,6 +40,7 @@ export const RootWrapper = styled.div`
 export const RootImageWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
+  height: 100%;
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -52,7 +53,7 @@ export const RootImageWrapper = styled.div`
 
 export const RootImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   @media only screen and (max-width : 1400px) {
     width: 100%;

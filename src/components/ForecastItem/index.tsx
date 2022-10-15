@@ -15,14 +15,10 @@ type IndexType = {
 }
 
 type ForecastProps = {
-  item: SingleItemType,
-  id: number;
+  item: SingleItemType
 }
 
-const ForecastItem = ( { item, id }: ForecastProps ) => {
-  console.log(id);
-  console.log(item);
-  //console.log(id);
+const ForecastItem = ( { item }: SingleItemType ) => {
   const [IconUrl, setIcon] = useState<React.ReactNode>(DefaultIcon);
   const {value2, value3, value4} = useContext(Context);
   const [isModalOpen, setModalState] = value2;

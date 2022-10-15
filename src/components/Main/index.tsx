@@ -56,7 +56,7 @@ const App:React.FC = () => {
   const [timestrSunset, setSunset] = useState<string>();
   const [currentBg, setCurrentBg] = useState<string>(ClearBG);
   const [Param, setParam] = useState<React.ReactNode>();
-  const [chartData, setChartData] = useState<ChartDataType[]>([]);
+  const [chartData, setChartData] = useState<any>([]);
   const [height, setHeight] = useState<number>(250);
 
   useEffect(() => {
@@ -75,6 +75,7 @@ const App:React.FC = () => {
           .then(axios.spread((first, second) => { 
             const forecast = first.data;
             const weather = second.data;
+            //console.log(forecast);
             setForecast(forecast);
             setWeather(weather);
            }))
@@ -102,7 +103,7 @@ const App:React.FC = () => {
         let timestrSunset = dateSunset.toLocaleTimeString();
         let currentForecast = forecast!.list.slice();
         let newForecast = [];
-        let chartData: ChartDataType[] = [];
+        let chartForecastData: ChartDataType[] = [];
         let newObj: any = {};
         currentForecast.map((item,index) => {
           let date = new Date(item.dt * 1000);
@@ -118,14 +119,27 @@ const App:React.FC = () => {
           item.day = day;
           item.formattedDate = date;
         })
-        for (let i = 0; i < 8; i++) {
-          let chartObj: any = {};
-          chartObj["time"] = currentForecast[i].dt.slice(0, -3);
-          chartObj["temperature"] = Math.round(currentForecast[i].main.temp);
-          chartData.push(chartObj);
-        }
-        setChartData(chartData);
+
         for (let i = 0; i < currentForecast.length; i+=8) {
+          const chunk = currentForecast.slice(i, i + 8);
+          let chartDataItem = [];
+          for (let j = 0; j < chunk.length; j++) {
+            let chartObj: any = {};
+            chartObj["time"] = chunk[j].dt.slice(0, -3);
+            let day = chunk[j].formattedDate.getDate();
+            let month = chunk[j].formattedDate.getMonth() + 1;
+            let year = chunk[j].formattedDate.getFullYear();
+            let date = day + ':' + month + ':' + year;
+            chartObj["time"] = chunk[j].dt.slice(0, -3);
+            chartObj["date"] = date.slice(0);
+            chartObj["temperature"] = Math.round(chunk[j].main.temp);
+            chartDataItem.push(chartObj);            
+          }
+          chartForecastData.push(chartDataItem);
+        }
+
+        setChartData("d");
+        for (let i = 0; i < currentForecast.length; i += 8) {
           let iconCode = currentForecast[i].weather[0].icon;
           let forecastCondition = currentForecast[i].weather[0].main;
           let svgIcon;
@@ -174,6 +188,7 @@ const App:React.FC = () => {
           newObj["currentDescription"] = currentForecast[i].weather[0].description;
           newObj["icon"] = svgIcon;
           newObj["wind"] = currentForecast[i].wind.speed;
+          newObj["chartData"] = chartForecastData[i/8];
           newForecast.push(newObj);
           newObj = {};
         }
@@ -221,7 +236,8 @@ const App:React.FC = () => {
         let Param = iconUrl;
         setParam(Param);
         setForecastData(newForecast);
-        setChartData(chartData);
+        setChartData(chartForecastData);
+        //setChartData(chartData);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
         setIconUrl(iconUrl);
@@ -310,10 +326,12 @@ const App:React.FC = () => {
                     </WeatherItem>
                   </WeatherRow>
                 </WeatherWrapper>
-                <WeatherChart height={height} />
+                {forecastData?.[0] !== undefined ?
+                  <WeatherChart item={forecastData[0]} />
+                : null}
                 <ForecastWrapper>
                   {forecastData?.map((item, index) => 
-                    <ForecastItem key = {index} item = {item} id={index} />
+                    <ForecastItem key = {index} item = {item}/>
                   )}
                 </ForecastWrapper>
               </Fragment> : 
