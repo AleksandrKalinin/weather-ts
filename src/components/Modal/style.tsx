@@ -24,6 +24,10 @@ export const WeatherWrapper = styled.div`
   background: #1860BE;
   padding: 50px;
   position: relative;
+  @media only screen and (max-width : 576px) {
+    padding: 50px 20px;
+    width: calc(100% - 80px);
+  }   
 `
 
 export const WeatherItem = styled.div`
@@ -33,6 +37,7 @@ export const WeatherItem = styled.div`
   justify-content: center;
   margin-bottom: 24px;
   @media only screen and (max-width : 576px) {
+    width: 100%;
     display: -webkit-box ;
     display: -ms-flexbox ;
     display: flex ;
@@ -43,7 +48,6 @@ export const WeatherItem = styled.div`
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    width: calc(100% - 60px);
     align-items: center;    
   }  
 `
@@ -61,15 +65,19 @@ export const WeatherItemHeader = styled.h4`
   @media only screen and (max-width : 768px) {
     margin: 0 8px;
     font-size: 21px;
-  }             
+  }
+  @media only screen and (max-width : 576px) {
+    min-width: 120px;
+    font-size: 20px;
+  }                 
 `
 
 export const WeatherItemText = styled.p`
   font-size: 16px;
-  margin: 8px 0;
+  margin: 8px 0 0 0;
   display: flex;
   align-items: center;
-  height: 50px;  
+  height: 40px;  
   @media only screen and (max-width : 1200px) {
     width: 100%;
   }
@@ -80,13 +88,14 @@ export const WeatherItemText = styled.p`
   @media only screen and (max-width : 576px) {
     font-size: 14px;
     font-weight: 700;
+    width: 100%;
   }   
 `
 
 export const WeatherRow = styled.div`
   display: flex;
   justify-content: space-between;
-  width: calc(100%);
+  width: 100%;
   margin: 0 auto;
   max-width: 1500px;
   @media only screen and (max-width : 1200px) {

@@ -10,10 +10,6 @@ import { SingleItemType } from './types';
 import { Context } from '../Context';
 import { DefaultIcon } from '../Icons/Icons';
 
-type IndexType = {
-  id: number
-}
-
 type ForecastProps = {
   item: SingleItemType
 }
@@ -32,7 +28,6 @@ const ForecastItem = ( { item }: SingleItemType ) => {
   },[])
 
   const openModal = (index: any) => {
-    //document.body.style.overflow = 'hidden';  
     setModalState(true);
     setModalData(item);
   }

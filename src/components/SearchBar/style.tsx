@@ -7,6 +7,9 @@ export const SearchBarWrapper = styled.div`
   width: calc(100% - 100px);
   display: flex;
   align-items: center;
+  @media only screen and (max-width : 768px) {
+    width: 100%;
+  }    
 `
 export const SearchInput = styled.input`
   width: calc(100% - 100px);

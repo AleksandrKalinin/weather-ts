@@ -20,7 +20,8 @@ export const RootContainer = styled.div`
   overflow: hidden;
   @media only screen and (max-width : 1200px) {
     padding: 50px 0;
-  }   
+  } 
+   
 `
 
 export const RootWrapper = styled.div`
@@ -35,6 +36,9 @@ export const RootWrapper = styled.div`
   padding: 50px;
   z-index: 999;
   position: relative;
+  @media only screen and (max-width : 576px) {
+    padding: 50px 20px;
+  }   
 `
 
 export const RootImageWrapper = styled.div`
@@ -87,6 +91,9 @@ export const WeatherWrapper = styled.div`
   width: calc(100% - 100px);
   max-width: 1500px;
   padding: 0 ;
+  @media only screen and (max-width : 576px) {
+    width: 100%;
+  }  
 `
 
 export const WeatherItem = styled.div`

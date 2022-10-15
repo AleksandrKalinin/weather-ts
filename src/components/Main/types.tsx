@@ -83,6 +83,12 @@ export type RequestData = {
   request: {}
 }
 
+export type ChartDataType = {
+  time?: string,
+  date?: string,
+  temperature?: number
+}
+
 export type ModalDataType = {
   city?: string,
   country?: string,
@@ -101,11 +107,7 @@ export type ModalDataType = {
   sunset?: number,
   temp?: number,
   weekday?: number,
-  wind?: number
+  wind?: number,
+  chartData: ChartDataType[]
 }
 
-export type ChartDataType = {
-  time?: string,
-  date?: string,
-  temperature?: number
-}[]

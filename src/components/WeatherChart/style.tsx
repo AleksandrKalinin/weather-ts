@@ -6,5 +6,5 @@ export const WeatherChartWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 30px 0 40px 0;
+	margin: 30px auto 40px auto;
 `

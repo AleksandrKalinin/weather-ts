@@ -19,7 +19,7 @@ import {  ModalWrapper,
 import Icon from './assets/close.png';
 import { ModalDataType } from './types';
 import { ChartHeightType } from '../../types';
-import { DefaultIcon, Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle, Humidity, Pressure, Wind, Sunrise, Sunset, Temperature } from '../Icons/Icons';
+import { DefaultIcon, Humidity, Pressure, Wind, Sunrise, Sunset, Temperature } from '../Icons/Icons';
 import WeatherChart from '../WeatherChart';
 
 type PropsType = {
@@ -73,7 +73,7 @@ const Modal = (props: PropsType) => {
           </WeatherItem>
           <WeatherItem>
             <WeatherItemHeader>{modalData!.currentName}</WeatherItemHeader>
-            <WeatherItemText>Current condition <WeatherItemIcon>{Clouds()}</WeatherItemIcon></WeatherItemText>
+            <WeatherItemText>Current condition <WeatherItemIcon></WeatherItemIcon></WeatherItemText>
           </WeatherItem>            
         </WeatherRow>
         <WeatherRow>
