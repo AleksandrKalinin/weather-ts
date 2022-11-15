@@ -21,7 +21,6 @@ import { GlobalStyle,
           ForecastWrapper, 
           TopRowImage  } from './style';
 import { Weather, Forecast, GeoType, ModalDataType, ChartDataType } from './types';
-import { ChartHeightType } from '../../types';
 import { Fog, Hail, Rain, Thunderstorm, Clear, Snow, Clouds, Haze, Mist, Dust, Tornado, Smoke, Drizzle, Humidity, Pressure, Wind, Sunrise, Sunset, Temperature } from '../Icons/Icons';
 import ForecastItem from '../ForecastItem';
 import SearchBar from '../SearchBar';
@@ -51,7 +50,6 @@ const App:React.FC = () => {
   const [currentBg, setCurrentBg] = useState<string>(ClearBG);
   const [Param, setParam] = useState<React.ReactNode>();
   const [chartData, setChartData] = useState<ChartDataType[][]>([]);
-  const [height, setHeight] = useState<number>(250);
 
   useEffect(() => {
     if(navigator.geolocation) {
@@ -84,34 +82,87 @@ const App:React.FC = () => {
         }      
   },[])  
 
+  const formatForecast = () => {
+    let currentForecast = forecast!.list.slice();
+    currentForecast.map((item : any, index: any) => {
+      let date = new Date(item.dt * 1000);
+      let hours = date.getHours();
+      let minutes = "0" + date.getMinutes();
+      let seconds = "0" + date.getSeconds();
+      let week = ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      let day = date.getDate();
+      let weekday = week[date.getDay()];
+      let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);          
+      item.dt = formattedTime;
+      item.weekday = weekday;
+      item.day = day;
+      item.formattedDate = date;
+    }) 
+    return currentForecast;   
+  }
+
+  const getBackgroundImage = () => {
+    let condition = weather?.weather[0]?.main;
+    let iconUrl : any | null = null;      
+    if(condition === 'Rain') {
+      iconUrl = Rain;
+      setCurrentBg(RainBG);
+    } else if(condition === 'Drizzle') {            
+      iconUrl = Drizzle;
+      setCurrentBg(RainBG);
+    } else if(condition === 'Clouds') {
+      iconUrl = Clouds;
+      setCurrentBg(CloudsBG);
+    } else if(condition === 'Hail') {            
+      iconUrl = Hail;
+      setCurrentBg(HailBG);
+    } else if(condition === 'Snow') {
+      iconUrl = Snow;
+      setCurrentBg(SnowBG);
+    } else if(condition === 'Fog') {
+      iconUrl = Fog;      
+      setCurrentBg(SnowBG);                     
+    } else if(condition === 'Thunderstorm') {
+      iconUrl = Thunderstorm;
+      setCurrentBg(ThunderBG); 
+    } else if(condition === 'Haze') {            
+      iconUrl = Haze;
+      setCurrentBg(FogBG); 
+    } else if(condition === 'Mist') {
+      iconUrl = Mist;
+      setCurrentBg(FogBG); 
+    } else if(condition === 'Tornado') {
+      iconUrl = Tornado;
+      setCurrentBg(ClearBG); 
+    } else if(condition === 'Smoke') {
+      iconUrl = Smoke;
+      setCurrentBg(FogBG); 
+    } else if(condition === 'Dust') {
+      iconUrl = Dust; 
+      setCurrentBg(ClearBG);                          
+    } else {
+      iconUrl = Clear;
+      setCurrentBg(ClearBG);
+    }
+    let Param = iconUrl;
+    setParam(Param);   
+    setIconUrl(iconUrl); 
+  }
+
   const fetchData = useCallback(() => {
       setFailed(false);
       if(typeof forecast !== 'undefined' &&  typeof weather !== 'undefined') {
-        let iconUrl : any | null = null;      
         let sunrise = weather?.sys?.sunrise;
         let sunset = weather?.sys?.sunset;
         let dateSunrise = new Date(sunrise! * 1000);
         let timestrSunrise = dateSunrise.toLocaleTimeString();
         let dateSunset = new Date(sunset! * 1000);
         let timestrSunset = dateSunset.toLocaleTimeString();
-        let currentForecast = forecast!.list.slice();
         let newForecast = [];
         let chartForecastData: ChartDataType[][] = [];
         let newObj: any = {};
-        currentForecast.map((item,index) => {
-          let date = new Date(item.dt * 1000);
-          let hours = date.getHours();
-          let minutes = "0" + date.getMinutes();
-          let seconds = "0" + date.getSeconds();
-          let week = ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-          let day = date.getDate();
-          let weekday = week[date.getDay()];
-          let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);          
-          item.dt = formattedTime;
-          item.weekday = weekday;
-          item.day = day;
-          item.formattedDate = date;
-        })
+
+        let currentForecast = formatForecast();
 
         for (let i = 0; i < currentForecast.length; i+=8) {
           const chunk = currentForecast.slice(i, i + 8);
@@ -184,54 +235,11 @@ const App:React.FC = () => {
           newForecast.push(newObj);
           newObj = {};
         }
-        let condition = weather?.weather[0]?.main;
-        if(condition === 'Rain') {
-          iconUrl = Rain;
-          setCurrentBg(RainBG);
-        } else if(condition === 'Drizzle') {            
-          iconUrl = Drizzle;
-          setCurrentBg(RainBG);
-        } else if(condition === 'Clouds') {
-          iconUrl = Clouds;
-          setCurrentBg(CloudsBG);
-        } else if(condition === 'Hail') {            
-          iconUrl = Hail;
-          setCurrentBg(HailBG);
-        } else if(condition === 'Snow') {
-          iconUrl = Snow;
-          setCurrentBg(SnowBG);
-        } else if(condition === 'Fog') {
-          iconUrl = Fog;      
-          setCurrentBg(SnowBG);                     
-        } else if(condition === 'Thunderstorm') {
-          iconUrl = Thunderstorm;
-          setCurrentBg(ThunderBG); 
-        } else if(condition === 'Haze') {            
-          iconUrl = Haze;
-          setCurrentBg(FogBG); 
-        } else if(condition === 'Mist') {
-          iconUrl = Mist;
-          setCurrentBg(FogBG); 
-        } else if(condition === 'Tornado') {
-          iconUrl = Tornado;
-          setCurrentBg(ClearBG); 
-        } else if(condition === 'Smoke') {
-          iconUrl = Smoke;
-          setCurrentBg(FogBG); 
-        } else if(condition === 'Dust') {
-          iconUrl = Dust; 
-          setCurrentBg(ClearBG);                          
-        } else {
-          iconUrl = Clear;
-          setCurrentBg(ClearBG);
-        }
-        let Param = iconUrl;
-        setParam(Param);
+        getBackgroundImage();
         setForecastData(newForecast);
         setChartData(chartForecastData);
         setSunset(timestrSunset);
         setSunrise(timestrSunrise);
-        setIconUrl(iconUrl);
       } 
     }, [weather, forecast])
 
@@ -301,7 +309,7 @@ const App:React.FC = () => {
                   <WeatherRow>
                     <WeatherItem>
                       <WeatherItemHeader>{weather?.weather[0]?.main}</WeatherItemHeader>
-                      <WeatherItemText> Current condition <WeatherItemIcon>{Clouds()}</WeatherItemIcon></WeatherItemText>
+                      <WeatherItemText> Current <WeatherItemIcon>{Clouds()}</WeatherItemIcon></WeatherItemText>
                     </WeatherItem>            
                     <WeatherItem>
                       <WeatherItemHeader>{weather?.main?.pressure} hpa</WeatherItemHeader>

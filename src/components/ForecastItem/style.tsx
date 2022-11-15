@@ -2,9 +2,11 @@ import styled from 'styled-components';
 
 export const ForecastItemWrapper = styled.div`
   width: 285px;
-  height: 300px;
+  height: auto;
+  min-height: 300px;
   background: #1860BE;
-  border: 1px solid #fff;
+  -webkit-box-shadow: 0 0 10px rgb(255 255 255 / 0.6);
+          box-shadow: 0 0 10px rgb(255 255 255 / 0.6);
   color: #fff;
   opacity: 0.8;
   padding: 0 10px;
@@ -18,9 +20,12 @@ export const ForecastItemWrapper = styled.div`
     width: 18%;
     max-width: 18%;
   }
-  @media only screen and (max-width : 992px) {
-    transform: scale(0.9);
-  }
+  @media only screen and (max-width : 1200px) {
+    width: 325px;
+    max-width: 325px;
+    margin: 15px auto;
+  }  
+
   @media only screen and (max-width : 768px) {
     width: 285px;
     max-width: 285px;    

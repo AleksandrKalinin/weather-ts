@@ -19,9 +19,8 @@ export const RootContainer = styled.div`
   width: 100%;
   overflow: hidden;
   @media only screen and (max-width : 1200px) {
-    padding: 50px 0;
+    padding: 0;
   } 
-   
 `
 
 export const RootWrapper = styled.div`
@@ -91,7 +90,7 @@ export const WeatherWrapper = styled.div`
   width: calc(100% - 100px);
   max-width: 1500px;
   padding: 0 ;
-  @media only screen and (max-width : 576px) {
+  @media only screen and (max-width : 768px) {
     width: 100%;
   }  
 `
@@ -113,8 +112,16 @@ export const WeatherItem = styled.div`
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    width: calc(100% - 60px);
-    align-items: center;    
+    width: calc(100%);
+    align-items: center; 
+    padding: 0 10px;
+    cursor: pointer;
+    &:hover {
+      background: #555555;
+    }
+    &:hover h4, &:hover p {
+      transform: scale(1.04);
+    }    
   }  
 `
 
@@ -128,10 +135,14 @@ export const WeatherItemHeader = styled.h4`
   font-size: 23px;
   font-weight: 400;
   margin-bottom: 12px;
+  transition: .2s all;
   @media only screen and (max-width : 768px) {
-    margin: 0 8px;
+    margin: 0;
     font-size: 21px;
-  }             
+  }
+  @media only screen and (max-width : 576px) {
+    width: 130px;
+  }               
 `
 
 export const WeatherItemText = styled.p`
@@ -140,6 +151,7 @@ export const WeatherItemText = styled.p`
   display: flex;
   align-items: center;
   height: 50px;
+  transition: .2s all;
   @media only screen and (max-width : 1200px) {
     width: 100%;
   }
@@ -148,7 +160,7 @@ export const WeatherItemText = styled.p`
     font-size: 14px;
   } 
   @media only screen and (max-width : 576px) {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
   }   
 `
@@ -172,10 +184,10 @@ export const WeatherRow = styled.div`
 export const TopRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 0 auto;
+  margin: 0 auto 40px 0;
   @media only screen and (max-width : 1200px) {
     width: 100%;
-  }  
+  }
 `
 
 export const TopRowItem = styled.div`
@@ -217,6 +229,14 @@ export const ForecastWrapper = styled.div`
   @media only screen and (max-width : 1400px) {
     width: calc(100% - 100px);
   }
+  @media only screen and (max-width : 1200px) {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;  
+    width: calc(100% - 200px);
+  }    
   @media only screen and (max-width : 992px) {
     width: calc(100% - 40px);    
   }

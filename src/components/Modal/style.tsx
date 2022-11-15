@@ -25,7 +25,7 @@ export const WeatherWrapper = styled.div`
   padding: 50px;
   position: relative;
   @media only screen and (max-width : 576px) {
-    padding: 50px 20px;
+    padding: 50px 10px;
     width: calc(100% - 80px);
   }   
 `
@@ -67,8 +67,9 @@ export const WeatherItemHeader = styled.h4`
     font-size: 21px;
   }
   @media only screen and (max-width : 576px) {
-    min-width: 120px;
-    font-size: 20px;
+    max-width: 130px;
+    min-width: 100px;
+    font-size: 18px;
   }                 
 `
 
@@ -86,7 +87,7 @@ export const WeatherItemText = styled.p`
     font-size: 14px;
   } 
   @media only screen and (max-width : 576px) {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     width: 100%;
   }   
